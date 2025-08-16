@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Search, Users, TrendingUp, Lightbulb, ArrowRight } from "lucide-react";
+import { Users, TrendingUp, Lightbulb, ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
@@ -46,7 +46,7 @@ export default function Home() {
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
             Nous connectons les entreprises en croissance avec des consultants experts et accompagnons 
-            les consultants débutants vers l'excellence grâce à notre système de mentoring innovant.
+            les consultants débutants vers l&apos;excellence grâce à notre système de mentoring innovant.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
@@ -101,8 +101,8 @@ export default function Home() {
                 Accélération de croissance
               </h3>
               <p className="text-gray-600">
-                Notre approche ciblée et nos outils IA vous permettent d'atteindre 
-                vos objectifs de croissance plus rapidement.
+                               Notre approche ciblée et nos outils IA vous permettent d&apos;atteindre 
+               vos objectifs de croissance plus rapidement.
               </p>
             </div>
             
