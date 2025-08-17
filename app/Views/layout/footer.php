@@ -3,14 +3,15 @@
         <div class="footer-content">
             <div class="footer-section">
                 <div class="footer-brand">
-                    <h3 class="footer-logo">Kladriva</h3>
+                    <img src="<?= base_url('img/logo.png') ?>" alt="JobBoard" class="footer-logo">
                     <p class="footer-desc">
                         Accélérons ensemble la croissance des entreprises IT grâce à des consultants sur mesure et un système de mentoring innovant.
                     </p>
                     <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link linkedin"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-link twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link instagram"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </div>
@@ -48,16 +49,16 @@
             <div class="footer-section">
                 <h4>Contact</h4>
                 <div class="contact-info">
-                    <p><i class="fas fa-envelope"></i> contact@kladriva.com</p>
-                    <p><i class="fas fa-phone"></i> +1 (514) 555-0123</p>
-                    <p><i class="fas fa-map-marker-alt"></i> Montréal, Québec, Canada</p>
+                    <p><i class="fas fa-envelope"></i> contact@jobboard.com</p>
+                    <p><i class="fas fa-phone"></i> +33 1 23 45 67 89</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Paris, France</p>
                 </div>
             </div>
         </div>
         
         <div class="footer-bottom">
             <div class="footer-bottom-content">
-                <p>&copy; 2024 Kladriva. Tous droits réservés.</p>
+                <p>&copy; 2024 JobBoard. Tous droits réservés.</p>
                 <div class="footer-legal">
                     <a href="<?= site_url('/confidentialite') ?>">Confidentialité</a>
                     <a href="<?= site_url('/conditions') ?>">Conditions d'utilisation</a>

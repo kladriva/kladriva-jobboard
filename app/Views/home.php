@@ -1,4 +1,4 @@
-<?= $this->extend('layout/default') ?>
+<?= $this->extend('layout/main') ?>
 
 <?= $this->section('content') ?>
 
@@ -10,7 +10,7 @@
                 Accélérez la <span class="highlight">croissance</span> de votre entreprise IT
             </h1>
             <p class="hero-subtitle">
-                Kladriva connecte les entreprises aux meilleurs consultants IT et accompagne les talents dans leur développement professionnel grâce à un système de mentoring innovant.
+                JobBoard connecte les entreprises aux meilleurs consultants IT et accompagne les talents dans leur développement professionnel grâce à un système de mentoring innovant.
             </p>
             <div class="hero-actions">
                 <a href="<?= site_url('/emplois') ?>" class="btn btn-primary btn-large">
@@ -30,6 +30,30 @@
         </div>
     </div>
 </section>
+
+<!-- Section Utilisateur Connecté -->
+<?php if (is_logged_in()): ?>
+<section class="user-welcome-section">
+    <div class="container">
+        <div class="user-welcome-card">
+            <div class="user-welcome-content">
+                <h2>Bienvenue, <?= esc(current_user()->username) ?> !</h2>
+                <p>Vous êtes connecté à votre espace personnel. Accédez rapidement à vos fonctionnalités.</p>
+                <div class="user-welcome-actions">
+                    <a href="<?= base_url('dashboard') ?>" class="btn btn-primary">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Tableau de bord
+                    </a>
+                    <a href="<?= base_url('logout') ?>" class="btn btn-outline btn-danger">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Déconnexion
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
 
 <!-- Stats Section -->
 <section class="stats-section">
@@ -95,6 +119,75 @@
                     Développez vos compétences avec notre programme de mentoring personnalisé et nos formations continues en technologies émergentes.
                 </p>
                 <a href="<?= site_url('/mentoring') ?>" class="service-link">En savoir plus <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Details Section -->
+<section class="services-details-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Nos Services Spécialisés</h2>
+            <p class="section-subtitle">Découvrez nos solutions complètes pour tous vos besoins</p>
+        </div>
+        
+        <div class="services-details-grid">
+            <div class="service-detail-card">
+                <div class="service-detail-icon">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+                <h3 class="service-detail-title">Consultants IT</h3>
+                <p class="service-detail-description">
+                    Accédez à notre réseau de consultants IT expérimentés et certifiés. Que ce soit pour un projet ponctuel ou une mission de longue durée, nous vous proposons les meilleurs profils adaptés à vos besoins spécifiques.
+                </p>
+                <div class="service-detail-features">
+                    <ul>
+                        <li>Profils validés et certifiés</li>
+                        <li>Expertise dans toutes les technologies</li>
+                        <li>Flexibilité des engagements</li>
+                        <li>Support et suivi continu</li>
+                    </ul>
+                </div>
+                <a href="<?= site_url('/consultants') ?>" class="service-detail-link">Découvrir nos consultants <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="service-detail-card">
+                <div class="service-detail-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3 class="service-detail-title">Programme de Mentoring</h3>
+                <p class="service-detail-description">
+                    Développez vos compétences avec notre programme de mentoring personnalisé. Nos mentors expérimentés vous accompagnent dans votre évolution professionnelle et vous aident à atteindre vos objectifs de carrière.
+                </p>
+                <div class="service-detail-features">
+                    <ul>
+                        <li>Mentoring personnalisé 1-on-1</li>
+                        <li>Suivi régulier et objectifs définis</li>
+                        <li>Accès à un réseau d'experts</li>
+                        <li>Certifications et accréditations</li>
+                    </ul>
+                </div>
+                <a href="<?= site_url('/mentoring') ?>" class="service-detail-link">Découvrir le mentoring <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="service-detail-card">
+                <div class="service-detail-icon">
+                    <i class="fas fa-building"></i>
+                </div>
+                <h3 class="service-detail-title">Solutions Entreprises</h3>
+                <p class="service-detail-description">
+                    Nous accompagnons les entreprises dans leur transformation digitale et leur croissance. De la stratégie à l'implémentation, nos solutions s'adaptent à la taille et aux enjeux de votre organisation.
+                </p>
+                <div class="service-detail-features">
+                    <ul>
+                        <li>Audit et conseil stratégique</li>
+                        <li>Accompagnement au changement</li>
+                        <li>Formation des équipes</li>
+                        <li>Support technique et opérationnel</li>
+                    </ul>
+                </div>
+                <a href="<?= site_url('/entreprises') ?>" class="service-detail-link">Découvrir nos solutions <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </div>

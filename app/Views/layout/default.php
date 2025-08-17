@@ -26,7 +26,8 @@
     <meta property="twitter:image" content="<?= base_url('img/kladriva-og.jpg') ?>">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
+    <link rel="icon" type="image/png" href="<?= base_url('img/logo-header.png') ?>">
+    <link rel="shortcut icon" type="image/png" href="<?= base_url('img/logo-header.png') ?>">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

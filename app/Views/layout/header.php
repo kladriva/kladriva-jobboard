@@ -1,11 +1,10 @@
 
-<body>
     <header class="main-header">
         <nav class="navbar">
             <div class="nav-container">
                 <div class="nav-brand">
                     <a href="<?= site_url('/') ?>" class="logo">
-                        <span class="logo-text">Kladriva</span>
+                        <img src="<?= base_url('img/logo.png') ?>" alt="JobBoard" class="logo-image">
                         <span class="logo-tagline">Accélérer la croissance</span>
                     </a>
                 </div>
@@ -16,16 +15,7 @@
                             <a href="<?= site_url('/') ?>" class="nav-link">Accueil</a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= site_url('/emplois') ?>" class="nav-link">Emplois IT</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= site_url('/consultants') ?>" class="nav-link">Consultants</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= site_url('/mentoring') ?>" class="nav-link">Mentoring</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= site_url('/entreprises') ?>" class="nav-link">Entreprises</a>
+                            <a href="<?= site_url('/jobs') ?>" class="nav-link">Jobs</a>
                         </li>
                         <li class="nav-item">
                             <a href="<?= site_url('/contact') ?>" class="nav-link">Contact</a>
@@ -34,8 +24,48 @@
                 </div>
                 
                 <div class="nav-actions">
-                    <a href="<?= site_url('/connexion') ?>" class="btn btn-outline">Connexion</a>
-                    <a href="<?= site_url('/inscription') ?>" class="btn btn-primary">S'inscrire</a>
+                    <?php if (is_logged_in()): ?>
+                        <!-- Utilisateur connecté -->
+                        <div class="user-dropdown">
+                            <button class="btn btn-outline dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-2"></i><?= esc(current_user()->username) ?>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="<?= base_url('dashboard') ?>">
+                                        <i class="fas fa-tachometer-alt me-2"></i>Tableau de bord
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="<?= base_url('auth/profile') ?>">
+                                        <i class="fas fa-user me-2"></i>Mon Profil
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="<?= base_url('test') ?>">
+                                        <i class="fas fa-shield-alt me-2"></i>Test Shield
+                                    </a>
+                                </li>
+                                <?php if (has_permission('admin.access')): ?>
+                                    <li>
+                                        <a class="dropdown-item" href="<?= base_url('admin') ?>">
+                                            <i class="fas fa-cog me-2"></i>Administration
+                                        </a>
+                                    </li>
+                                <?php endif; ?>
+                                <li><hr class="dropdown-divider"></li>
+                                                            <li>
+                                <a class="dropdown-item text-danger" href="<?= base_url('logout') ?>">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                                </a>
+                            </li>
+                            </ul>
+                        </div>
+                    <?php else: ?>
+                        <!-- Utilisateur non connecté -->
+                        <a href="<?= site_url('/connexion') ?>" class="btn btn-outline">Connexion</a>
+                        <a href="<?= site_url('/inscription') ?>" class="btn btn-primary">Inscription</a>
+                    <?php endif; ?>
                 </div>
                 
                 <div class="nav-toggle" id="nav-toggle">
@@ -46,4 +76,3 @@
             </div>
         </nav>
     </header>
-</body>
