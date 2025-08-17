@@ -41,11 +41,7 @@
                                         <i class="fas fa-user me-2"></i>Mon Profil
                                     </a>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item" href="<?= base_url('test') ?>">
-                                        <i class="fas fa-shield-alt me-2"></i>Test Shield
-                                    </a>
-                                </li>
+
                                 <?php if (has_permission('admin.access')): ?>
                                     <li>
                                         <a class="dropdown-item" href="<?= base_url('admin') ?>">
@@ -55,7 +51,7 @@
                                 <?php endif; ?>
                                 <li><hr class="dropdown-divider"></li>
                                                             <li>
-                                <a class="dropdown-item text-danger" href="<?= base_url('logout') ?>">
+                                <a class="dropdown-item text-danger" href="<?= base_url('auth/logout') ?>">
                                     <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
                                 </a>
                             </li>

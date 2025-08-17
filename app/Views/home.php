@@ -44,7 +44,7 @@
                         <i class="fas fa-tachometer-alt"></i>
                         Tableau de bord
                     </a>
-                    <a href="<?= base_url('logout') ?>" class="btn btn-outline btn-danger">
+                                            <a href="<?= base_url('auth/logout') ?>" class="btn btn-outline btn-danger">
                         <i class="fas fa-sign-out-alt"></i>
                         Déconnexion
                     </a>

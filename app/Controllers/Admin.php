@@ -39,7 +39,7 @@ class Admin extends BaseController
         
         // Champs requis
         $crud->requiredFields(['username', 'email']);
-        
+
         // Champs de texte long
         $crud->fieldType('first_name', 'text');
         $crud->fieldType('last_name', 'text');
@@ -67,10 +67,10 @@ class Admin extends BaseController
         $crud->displayAs('first_name', 'Prénom');
         $crud->displayAs('last_name', 'Nom');
         $crud->displayAs('updated_at', 'Dernière modification');
-        
-        $output = $crud->render();
-        return view('admin_view', (array)$output);
-    }
+
+    $output = $crud->render();
+    return view('admin_view', (array)$output);
+}
 
     // ===== GESTION DES EMPLOIS =====
     

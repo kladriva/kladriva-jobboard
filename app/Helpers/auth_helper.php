@@ -119,3 +119,65 @@ if (!function_exists('auth_status')) {
         }
     }
 }
+
+if (!function_exists('get_current_user_safe')) {
+    /**
+     * Récupère l'utilisateur connecté de manière sécurisée
+     * Gère les cas où l'objet utilisateur pourrait être incomplet
+     */
+    function get_current_user_safe()
+    {
+        try {
+            if (!service('auth')->loggedIn()) {
+                return null;
+            }
+            
+            $user = service('auth')->user();
+            
+            // Vérifier que l'utilisateur est complet
+            if (!$user || !$user->id) {
+                // Déconnecter l'utilisateur corrompu
+                service('auth')->logout();
+                return null;
+            }
+            
+            return $user;
+            
+        } catch (\Exception $e) {
+            // En cas d'erreur, déconnecter et retourner null
+            service('auth')->logout();
+            return null;
+        }
+    }
+}
+
+if (!function_exists('is_user_valid')) {
+    /**
+     * Vérifie si l'utilisateur connecté est valide
+     */
+    function is_user_valid($user = null)
+    {
+        if ($user === null) {
+            $user = get_current_user_safe();
+        }
+        
+        return $user && $user->id;
+    }
+}
+
+if (!function_exists('require_valid_user')) {
+    /**
+     * Redirige vers la connexion si l'utilisateur n'est pas valide
+     */
+    function require_valid_user()
+    {
+        $user = get_current_user_safe();
+        
+        if (!$user) {
+            return redirect()->to('/connexion')
+                ->with('error', 'Session utilisateur invalide. Veuillez vous reconnecter.');
+        }
+        
+        return $user;
+    }
+}

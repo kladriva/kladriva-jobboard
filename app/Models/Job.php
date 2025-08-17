@@ -17,7 +17,7 @@ class Job extends Model
         'benefits', 'salary_min', 'salary_max', 'salary_currency', 'salary_period',
         'location', 'location_type', 'contract_type', 'experience_level',
         'skills_required', 'technologies', 'status', 'is_featured', 'is_urgent',
-        'published_at', 'expires_at'
+        'published_at', 'expires_at', 'views_count', 'applications_count'
     ];
     
     protected $useTimestamps = true;
@@ -36,21 +36,29 @@ class Job extends Model
     ];
     
     // Relations
-    public function getJobWithRelations($id)
+    public function getJobWithRelations($id = null, $slug = null)
     {
-        return $this->select('jobs.*, companies.name as company_name, companies.logo as company_logo, 
-                              companies.industry as company_industry, job_categories.name as category_name, 
-                              job_categories.color as category_color')
-                    ->join('companies', 'companies.id = jobs.company_id')
-                    ->join('job_categories', 'job_categories.id = jobs.category_id')
-                    ->where('jobs.id', $id)
-                    ->where('jobs.status', 'published')
-                    ->first();
+        $builder = $this->select('jobs.*, companies.name as company_name, companies.slug as company_slug, companies.logo as company_logo, 
+                                  companies.industry as company_industry, job_categories.name as category_name, 
+                                  job_categories.color as category_color')
+                        ->join('companies', 'companies.id = jobs.company_id')
+                        ->join('job_categories', 'job_categories.id = jobs.category_id')
+                        ->where('jobs.status', 'published');
+        
+        if ($id !== null) {
+            $builder->where('jobs.id', $id);
+        } elseif ($slug !== null) {
+            $builder->where('jobs.slug', $slug);
+        } else {
+            return null;
+        }
+        
+        return $builder->first();
     }
     
     public function getPublishedJobs($filters = [])
     {
-        $builder = $this->select('jobs.*, companies.name as company_name, companies.logo as company_logo, 
+        $builder = $this->select('jobs.*, companies.name as company_name, companies.slug as company_slug, companies.logo as company_logo, 
                                   job_categories.name as category_name, job_categories.color as category_color')
                         ->join('companies', 'companies.id = jobs.company_id')
                         ->join('job_categories', 'job_categories.id = jobs.category_id')
@@ -85,8 +93,14 @@ class Job extends Model
     
     public function incrementViews($id)
     {
-        return $this->set('views_count', 'views_count + 1', false)
-                    ->where('id', $id)
-                    ->update();
+        try {
+            // Utiliser une requête SQL brute pour éviter les problèmes de validation
+            $sql = "UPDATE {$this->table} SET views_count = COALESCE(views_count, 0) + 1 WHERE id = ?";
+            return $this->db->query($sql, [$id]);
+        } catch (\Exception $e) {
+            // En cas d'erreur, on log mais on ne bloque pas l'affichage
+            log_message('error', 'Erreur lors de l\'incrémentation des vues pour l\'emploi ' . $id . ': ' . $e->getMessage());
+            return false;
+        }
     }
 }
