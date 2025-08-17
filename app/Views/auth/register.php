@@ -1,396 +1,222 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription - JobBoard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= base_url('css/styles.css') ?>">
-</head>
-<body class="auth-page">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="auth-container">
-                    <div class="auth-header">
-                        <h2><i class="fas fa-user-plus me-2"></i>Créer votre compte</h2>
-                        <p class="mb-0">Rejoignez notre communauté de professionnels</p>
+<?= $this->extend('layout/main') ?>
+
+<?= $this->section('content') ?>
+
+<!-- Formulaire d'inscription moderne -->
+<div class="auth-page-container">
+    <div class="auth-form-wrapper">
+        <!-- Header avec logo et titre -->
+        <div class="auth-header">
+            <div class="auth-logo">
+                <div class="logo-circle">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+            </div>
+            <h1 class="auth-title">Rejoignez-nous</h1>
+            <p class="auth-subtitle">Créez votre compte JobBoard et commencez votre aventure</p>
+        </div>
+        
+        <!-- Formulaire principal -->
+        <div class="auth-form-container">
+            <!-- Affichage des erreurs -->
+            <?php if (session()->getFlashdata('error')): ?>
+                <div class="alert alert-danger alert-dismissible fade show mb-4">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <?= session()->getFlashdata('error') ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+            
+            <!-- Affichage des erreurs de validation -->
+            <?php if (session()->getFlashdata('errors')): ?>
+                <div class="alert alert-danger alert-dismissible fade show mb-4">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Erreurs de validation :</strong>
+                    <ul class="mb-0 mt-2">
+                        <?php foreach (session()->getFlashdata('errors') as $field => $error): ?>
+                            <li><?= esc($error) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+            
+            <form action="<?= base_url('auth/attemptRegister') ?>" method="post" class="auth-form">
+                <!-- Champ nom d'utilisateur -->
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <input type="text" id="username" name="username" class="form-control modern" 
+                               placeholder="Votre nom d'utilisateur" required 
+                               value="<?= old('username') ?>">
+                        <div class="input-focus-border"></div>
                     </div>
-                    
-                    <div class="auth-form">
-                        <!-- Indicateur d'étapes -->
-                        <div class="step-indicator">
-                            <div class="step active" id="step1">1</div>
-                            <div class="step" id="step2">2</div>
-                            <div class="step" id="step3">3</div>
+                    <?php if (session()->getFlashdata('errors') && isset(session()->getFlashdata('errors')['username'])): ?>
+                        <div class="invalid-feedback d-block">
+                            <i class="fas fa-exclamation-circle me-1"></i>
+                            <?= esc(session()->getFlashdata('errors')['username']) ?>
                         </div>
-
-                        <?php if (session()->getFlashdata('error')): ?>
-                            <div class="alert alert-danger">
-                                <i class="fas fa-exclamation-triangle me-2"></i>
-                                <?= session()->getFlashdata('error') ?>
-                            </div>
-                        <?php endif; ?>
-
-                        <?php if (session()->getFlashdata('success')): ?>
-                            <div class="alert alert-success">
-                                <i class="fas fa-check-circle me-2"></i>
-                                <?= session()->getFlashdata('success') ?>
-                            </div>
-                        <?php endif; ?>
-
-                        <form action="<?= base_url('auth/attemptRegister') ?>" method="post" id="registerForm" novalidate>
-                            <?= csrf_field() ?>
-                            
-                            <!-- Étape 1: Informations de base -->
-                            <div class="step-content" id="step1-content">
-                                <h5 class="mb-3"><i class="fas fa-user me-2"></i>Informations de base</h5>
-                                
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="username" class="form-label">Nom d'utilisateur *</label>
-                                        <input type="text" 
-                                               class="form-control" 
-                                               id="username" 
-                                               name="username" 
-                                               value="<?= old('username') ?>"
-                                               required>
-                                        <div class="form-text">3-20 caractères, lettres et chiffres uniquement</div>
-                                    </div>
-                                    
-                                    <div class="col-md-6 mb-3">
-                                        <label for="email" class="form-label">Email *</label>
-                                        <input type="email" 
-                                               class="form-control" 
-                                               id="email" 
-                                               name="email" 
-                                               value="<?= old('email') ?>"
-                                               required>
-                                        <div class="form-text">Votre email professionnel</div>
-                                    </div>
-                                </div>
-
-                                <div class="text-end">
-                                    <button type="button" class="btn btn-primary" onclick="nextStep(2)">
-                                        Suivant <i class="fas fa-arrow-right ms-1"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Étape 2: Sécurité -->
-                            <div class="step-content" id="step2-content" style="display: none;">
-                                <h5 class="mb-3"><i class="fas fa-shield-alt me-2"></i>Sécurité</h5>
-                                
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Mot de passe *</label>
-                                    <input type="password" 
-                                           class="form-control" 
-                                           id="password" 
-                                           name="password" 
-                                           required>
-                                    <div class="password-strength">
-                                        <div class="progress mb-2">
-                                            <div class="progress-bar strength-bar" id="strengthBar" role="progressbar"></div>
-                                        </div>
-                                        <small class="text-muted" id="strengthText">Force du mot de passe</small>
-                                    </div>
-                                    
-                                    <ul class="requirements-list" id="passwordRequirements">
-                                        <li id="req-length"><i class="fas fa-circle"></i> Au moins 8 caractères</li>
-                                        <li id="req-lowercase"><i class="fas fa-circle"></i> Une lettre minuscule</li>
-                                        <li id="req-uppercase"><i class="fas fa-circle"></i> Une lettre majuscule</li>
-                                        <li id="req-number"><i class="fas fa-circle"></i> Un chiffre</li>
-                                        <li id="req-special"><i class="fas fa-circle"></i> Un caractère spécial</li>
-                                    </ul>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="password_confirm" class="form-label">Confirmer le mot de passe *</label>
-                                    <input type="password" 
-                                           class="form-control" 
-                                           id="password_confirm" 
-                                           name="password_confirm" 
-                                           required>
-                                    <div class="form-text">Répétez votre mot de passe</div>
-                                </div>
-
-                                <div class="d-flex justify-content-between">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="prevStep(1)">
-                                        <i class="fas fa-arrow-left me-1"></i> Précédent
-                                    </button>
-                                    <button type="button" class="btn btn-primary" onclick="nextStep(3)">
-                                        Suivant <i class="fas fa-arrow-right ms-1"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Étape 3: Finalisation -->
-                            <div class="step-content" id="step3-content" style="display: none;">
-                                <h5 class="mb-3"><i class="fas fa-check-circle me-2"></i>Finalisation</h5>
-                                
-                                <div class="mb-3">
-                                    <label for="user_type" class="form-label">Type de compte *</label>
-                                    <select class="form-select" id="user_type" name="user_type" required>
-                                        <option value="">Choisissez votre profil</option>
-                                        <option value="jobseeker">Candidat à l'emploi</option>
-                                        <option value="recruiter">Recruteur</option>
-                                        <option value="consultant">Consultant</option>
-                                        <option value="student">Étudiant</option>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="location" class="form-label">Localisation</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           id="location" 
-                                           name="location" 
-                                           placeholder="Ville, Pays">
-                                </div>
-
-                                <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
-                                    <label class="form-check-label" for="terms">
-                                        J'accepte les <a href="<?= base_url('conditions') ?>" target="_blank">conditions d'utilisation</a> *
-                                    </label>
-                                </div>
-
-                                <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="privacy" name="privacy" required>
-                                    <label class="form-check-label" for="privacy">
-                                        J'accepte la <a href="<?= base_url('confidentialite') ?>" target="_blank">politique de confidentialité</a> *
-                                    </label>
-                                </div>
-
-                                <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="newsletter" name="newsletter">
-                                    <label class="form-check-label" for="newsletter">
-                                        Recevoir la newsletter et les offres spéciales
-                                    </label>
-                                </div>
-
-                                <div class="d-flex justify-content-between">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="prevStep(2)">
-                                        <i class="fas fa-arrow-left me-1"></i> Précédent
-                                    </button>
-                                    <button type="submit" class="btn btn-primary btn-register">
-                                        <i class="fas fa-user-plus me-2"></i>Créer mon compte
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-
-                        <hr class="my-4">
-
-                        <div class="text-center">
-                            <p class="mb-0">
-                                Déjà un compte ? 
-                                <a href="<?= base_url('connexion') ?>" class="text-decoration-none">
-                                    Se connecter
-                                </a>
-                            </p>
+                    <?php endif; ?>
+                </div>
+                
+                <!-- Champ email -->
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
                         </div>
-
-                        <!-- Connexion sociale -->
-                        <div class="text-center mt-4">
-                            <p class="text-muted mb-3">Ou inscrivez-vous avec</p>
-                            <div class="d-flex justify-content-center gap-2">
-                                <button class="btn btn-outline-primary">
-                                    <i class="fab fa-google me-2"></i>Google
-                                </button>
-                                <button class="btn btn-outline-primary">
-                                    <i class="fab fa-linkedin me-2"></i>LinkedIn
-                                </button>
-                                <button class="btn btn-outline-primary">
-                                    <i class="fab fa-github me-2"></i>GitHub
-                                </button>
-                            </div>
+                        <input type="email" id="email" name="email" class="form-control modern" 
+                               placeholder="Votre adresse email" required 
+                               value="<?= old('email') ?>">
+                        <div class="input-focus-border"></div>
+                    </div>
+                    <?php if (session()->getFlashdata('errors') && isset(session()->getFlashdata('errors')['email'])): ?>
+                        <div class="invalid-feedback d-block">
+                            <i class="fas fa-exclamation-circle me-1"></i>
+                            <?= esc(session()->getFlashdata('errors')['email']) ?>
                         </div>
+                    <?php endif; ?>
+                </div>
+                
+                <!-- Champ mot de passe -->
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <input type="password" id="password" name="password" class="form-control modern" 
+                               placeholder="Votre mot de passe" required>
+                        <div class="input-focus-border"></div>
+                    </div>
+                    <?php if (session()->getFlashdata('errors') && isset(session()->getFlashdata('errors')['password'])): ?>
+                        <div class="invalid-feedback d-block">
+                            <i class="fas fa-exclamation-circle me-1"></i>
+                            <?= esc(session()->getFlashdata('errors')['password']) ?>
+                        </div>
+                    <?php endif; ?>
+                    <div class="password-strength-indicator">
+                        <div class="strength-bar">
+                            <div class="strength-fill" data-strength="0"></div>
+                        </div>
+                        <span class="strength-text">Force du mot de passe</span>
                     </div>
                 </div>
+                
+                <!-- Champ confirmation mot de passe -->
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <input type="password" id="password_confirm" name="password_confirm" class="form-control modern" 
+                               placeholder="Confirmez votre mot de passe" required>
+                        <div class="input-focus-border"></div>
+                    </div>
+                    <?php if (session()->getFlashdata('errors') && isset(session()->getFlashdata('errors')['password_confirm'])): ?>
+                        <div class="invalid-feedback d-block">
+                            <i class="fas fa-exclamation-circle me-1"></i>
+                            <?= esc(session()->getFlashdata('errors')['password_confirm']) ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                
+                <!-- Conditions d'utilisation -->
+                <div class="form-group">
+                    <div class="form-check modern-check terms-check">
+                        <input type="checkbox" id="terms" name="terms" class="form-check-input" required>
+                        <label for="terms" class="form-check-label">
+                            J'accepte les <a href="<?= base_url('conditions') ?>" class="terms-link">conditions d'utilisation</a> 
+                            et la <a href="<?= base_url('confidentialite') ?>" class="terms-link">politique de confidentialité</a>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Bouton d'inscription -->
+                <button type="submit" class="btn btn-primary btn-auth-modern">
+                    <span class="btn-content">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Créer mon compte</span>
+                    </span>
+                    <div class="btn-ripple"></div>
+                </button>
+            </form>
+            
+            <!-- Séparateur -->
+            <div class="auth-divider">
+                <span class="divider-text">ou</span>
+            </div>
+            
+            <!-- Inscription sociale (optionnel) -->
+            <div class="social-auth-section">
+                <button type="button" class="btn btn-social btn-google">
+                    <i class="fab fa-google"></i>
+                    S'inscrire avec Google
+                </button>
+                <button type="button" class="btn btn-social btn-linkedin">
+                    <i class="fab fa-linkedin"></i>
+                    S'inscrire avec LinkedIn
+                </button>
+            </div>
+            
+            <!-- Liens d'aide -->
+            <div class="auth-links">
+                <p class="auth-footer-text">
+                    Déjà un compte ? 
+                    <a href="<?= base_url('connexion') ?>" class="auth-link highlight">
+                        Se connecter
+                    </a>
+                </p>
             </div>
         </div>
     </div>
+    
+    <!-- Éléments décoratifs -->
+    <div class="auth-decoration">
+        <div class="decoration-circle circle-1"></div>
+        <div class="decoration-circle circle-2"></div>
+        <div class="decoration-circle circle-3"></div>
+        <div class="decoration-circle circle-4"></div>
+    </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        let currentStep = 1;
-        const totalSteps = 3;
+<!-- Script pour l'indicateur de force du mot de passe -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('password');
+    const strengthFill = document.querySelector('.strength-fill');
+    const strengthText = document.querySelector('.strength-text');
+    
+    passwordInput.addEventListener('input', function() {
+        const password = this.value;
+        const strength = calculatePasswordStrength(password);
+        updateStrengthIndicator(strength);
+    });
+    
+    function calculatePasswordStrength(password) {
+        let score = 0;
+        
+        if (password.length >= 8) score++;
+        if (/[a-z]/.test(password)) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
+        
+        return Math.min(score, 5);
+    }
+    
+    function updateStrengthIndicator(strength) {
+        const percentage = (strength / 5) * 100;
+        const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#16a34a'];
+        const texts = ['Très faible', 'Faible', 'Moyen', 'Fort', 'Très fort'];
+        
+        strengthFill.style.width = percentage + '%';
+        strengthFill.style.backgroundColor = colors[strength - 1] || '#e5e7eb';
+        strengthText.textContent = texts[strength - 1] || 'Force du mot de passe';
+        strengthText.style.color = colors[strength - 1] || '#6b7280';
+    }
+});
+</script>
 
-        // Navigation entre les étapes
-        function nextStep(step) {
-            if (validateCurrentStep()) {
-                document.getElementById(`step${currentStep}-content`).style.display = 'none';
-                document.getElementById(`step${step}-content`).style.display = 'block';
-                
-                document.getElementById(`step${currentStep}`).classList.remove('active');
-                document.getElementById(`step${currentStep}`).classList.add('completed');
-                document.getElementById(`step${step}`).classList.add('active');
-                
-                currentStep = step;
-            }
-        }
-
-        function prevStep(step) {
-            document.getElementById(`step${currentStep}-content`).style.display = 'none';
-            document.getElementById(`step${step}-content`).style.display = 'block';
-            
-            document.getElementById(`step${currentStep}`).classList.remove('active');
-            document.getElementById(`step${step}`).classList.add('active');
-            document.getElementById(`step${step}`).classList.remove('completed');
-            
-            currentStep = step;
-        }
-
-        // Validation des étapes
-        function validateCurrentStep() {
-            if (currentStep === 1) {
-                const username = document.getElementById('username').value;
-                const email = document.getElementById('email').value;
-                
-                if (!username || !email) {
-                    alert('Veuillez remplir tous les champs obligatoires');
-                    return false;
-                }
-                
-                if (username.length < 3 || username.length > 20) {
-                    alert('Le nom d\'utilisateur doit contenir entre 3 et 20 caractères');
-                    return false;
-                }
-                
-                if (!email.includes('@')) {
-                    alert('Veuillez entrer un email valide');
-                    return false;
-                }
-            }
-            
-            if (currentStep === 2) {
-                const password = document.getElementById('password').value;
-                const passwordConfirm = document.getElementById('password_confirm').value;
-                
-                if (!password || !passwordConfirm) {
-                    alert('Veuillez remplir tous les champs de mot de passe');
-                    return false;
-                }
-                
-                if (password !== passwordConfirm) {
-                    alert('Les mots de passe ne correspondent pas');
-                    return false;
-                }
-                
-                if (password.length < 8) {
-                    alert('Le mot de passe doit contenir au moins 8 caractères');
-                    return false;
-                }
-            }
-            
-            return true;
-        }
-
-        // Validation du mot de passe en temps réel
-        document.getElementById('password').addEventListener('input', function() {
-            const password = this.value;
-            const strengthBar = document.getElementById('strengthBar');
-            const strengthText = document.getElementById('strengthText');
-            
-            let strength = 0;
-            let text = '';
-            let color = '';
-            
-            // Vérifier les exigences
-            const requirements = {
-                length: password.length >= 8,
-                lowercase: /[a-z]/.test(password),
-                uppercase: /[A-Z]/.test(password),
-                number: /[0-9]/.test(password),
-                special: /[^A-Za-z0-9]/.test(password)
-            };
-            
-            // Mettre à jour l'affichage des exigences
-            Object.keys(requirements).forEach(req => {
-                const element = document.getElementById(`req-${req}`);
-                if (requirements[req]) {
-                    element.classList.add('valid');
-                    element.classList.remove('invalid');
-                    element.innerHTML = `<i class="fas fa-check-circle"></i> ${element.textContent.replace('●', '')}`;
-                    strength++;
-                } else {
-                    element.classList.add('invalid');
-                    element.classList.remove('valid');
-                    element.innerHTML = `<i class="fas fa-times-circle"></i> ${element.textContent.replace('●', '')}`;
-                }
-            });
-            
-            // Déterminer la force et la couleur
-            switch(strength) {
-                case 0:
-                case 1:
-                    text = 'Très faible';
-                    color = '#dc3545';
-                    break;
-                case 2:
-                    text = 'Faible';
-                    color = '#fd7e14';
-                    break;
-                case 3:
-                    text = 'Moyen';
-                    color = '#ffc107';
-                    break;
-                case 4:
-                    text = 'Fort';
-                    color = '#28a745';
-                    break;
-                case 5:
-                    text = 'Très fort';
-                    color = '#20c997';
-                    break;
-            }
-            
-            strengthBar.style.width = (strength * 20) + '%';
-            strengthBar.style.backgroundColor = color;
-            strengthText.textContent = text;
-        });
-
-        // Validation finale du formulaire
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            if (!validateCurrentStep()) {
-                e.preventDefault();
-                return false;
-            }
-            
-            const terms = document.getElementById('terms').checked;
-            const privacy = document.getElementById('privacy').checked;
-            
-            if (!terms || !privacy) {
-                e.preventDefault();
-                alert('Veuillez accepter les conditions d\'utilisation et la politique de confidentialité');
-                return false;
-            }
-        });
-
-        // Validation en temps réel des champs
-        document.getElementById('username').addEventListener('input', function() {
-            const value = this.value;
-            if (value.length >= 3 && value.length <= 20) {
-                this.classList.add('is-valid');
-                this.classList.remove('is-invalid');
-            } else {
-                this.classList.add('is-invalid');
-                this.classList.remove('is-valid');
-            }
-        });
-
-        document.getElementById('email').addEventListener('input', function() {
-            const value = this.value;
-            if (value.includes('@') && value.includes('.')) {
-                this.classList.add('is-valid');
-                this.classList.remove('is-invalid');
-            } else {
-                this.classList.add('is-invalid');
-                this.classList.remove('is-valid');
-            }
-        });
-    </script>
-</body>
-</html>
+<?= $this->endSection() ?>

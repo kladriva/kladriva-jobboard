@@ -2,18 +2,17 @@
 
 namespace App\Controllers;
 
-use CodeIgniter\Controller;
 use CodeIgniter\HTTP\RedirectResponse;
-use CodeIgniter\Shield\Authentication\Authenticators\Session;
 use CodeIgniter\Shield\Models\UserModel;
+use App\Validation\AuthValidation;
 
-class Auth extends Controller
+class Auth extends BaseController
 {
     protected $auth;
 
     public function __construct()
     {
-        $this->auth = service('auth');
+        $this->auth = auth();
     }
 
     /**
@@ -26,7 +25,10 @@ class Auth extends Controller
             return redirect()->to('/');
         }
 
-        return view('auth/login');
+        return view('auth/login', [
+            'page_title' => 'Connexion - JobBoard',
+            'page_description' => 'Connectez-vous à votre espace personnel JobBoard'
+        ]);
     }
 
     /**
@@ -60,7 +62,10 @@ class Auth extends Controller
             return redirect()->to('/');
         }
 
-        return view('auth/register');
+        return view('auth/register', [
+            'page_title' => 'Inscription - JobBoard',
+            'page_description' => 'Créez votre compte JobBoard et rejoignez notre communauté'
+        ]);
     }
 
     /**
@@ -68,21 +73,49 @@ class Auth extends Controller
      */
     public function attemptRegister(): RedirectResponse
     {
+        // Utiliser notre classe de validation personnalisée
+        $validation = new AuthValidation();
+        $rules = $validation->getRegistrationRules();
+        
+        // Validation des données
+        if (!$this->validate($rules)) {
+            return redirect()->back()
+                ->with('error', 'Veuillez corriger les erreurs ci-dessous')
+                ->withInput()
+                ->with('errors', $this->validator->getErrors());
+        }
+
         $userModel = new UserModel();
         
+        // Créer l'utilisateur avec Shield (seulement username dans la table users)
         $user = new \CodeIgniter\Shield\Entities\User([
             'username' => $this->request->getPost('username'),
-            'email' => $this->request->getPost('email'),
-            'password' => $this->request->getPost('password'),
         ]);
 
-        $userModel->save($user);
+        try {
+            // Sauvegarder l'utilisateur (cela va déclencher saveEmailIdentity automatiquement)
+            $userModel->save($user);
+            
+            // Récupérer l'utilisateur complet avec son ID depuis la base de données
+            $user = $userModel->findById($userModel->getInsertID());
+            
+            // Créer l'identité email/mot de passe
+            $user->createEmailIdentity([
+                'email' => $this->request->getPost('email'),
+                'password' => $this->request->getPost('password'),
+            ]);
 
-        // Connecter automatiquement l'utilisateur
-        $this->auth->login($user);
+            // Connecter automatiquement l'utilisateur
+            $this->auth->login($user);
 
-        return redirect()->to('/')
-            ->with('success', 'Compte créé avec succès !');
+            return redirect()->to('/')
+                ->with('success', 'Compte créé avec succès !');
+                
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Erreur lors de la création du compte. Veuillez réessayer.')
+                ->withInput();
+        }
     }
 
     /**
@@ -108,6 +141,8 @@ class Auth extends Controller
         $user = $this->auth->getUser();
         
         return view('auth/profile', [
+            'page_title' => 'Mon Profil - JobBoard',
+            'page_description' => 'Gérez votre profil personnel JobBoard',
             'user' => $user
         ]);
     }

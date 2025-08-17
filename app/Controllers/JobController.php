@@ -98,16 +98,20 @@ class JobController extends BaseController
             return redirect()->to('/login')->with('error', 'Vous devez être connecté pour voir les détails des emplois.');
         }
         
-        $job = $this->jobModel->where('slug', $slug)
-                              ->where('status', 'published')
-                              ->first();
+        // Récupérer l'emploi avec toutes les relations (incluant company_name)
+        $job = $this->jobModel->getJobWithRelations(null, $slug);
         
         if (!$job) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Emploi non trouvé');
         }
         
-        // Incrémenter le compteur de vues
-        $this->jobModel->incrementViews($job['id']);
+        // Incrémenter le compteur de vues (optionnel, ne pas bloquer l'affichage)
+        try {
+            $this->jobModel->incrementViews($job['id']);
+        } catch (\Exception $e) {
+            // Log l'erreur mais ne pas bloquer l'affichage de l'emploi
+            log_message('error', 'Erreur lors de l\'incrémentation des vues: ' . $e->getMessage());
+        }
         
         // Récupérer les informations de l'utilisateur connecté
         $user = auth()->user();
@@ -115,7 +119,7 @@ class JobController extends BaseController
         $data = [
             'page_title' => $job['title'] . ' - ' . $job['company_name'],
             'page_description' => substr(strip_tags($job['description']), 0, 160),
-            'job' => $this->jobModel->getJobWithRelations($job['id']),
+            'job' => $job,
             'related_jobs' => $this->getRelatedJobs($job['id'], $job['category_id']),
             'user' => $user // Passer l'utilisateur connecté à la vue
         ];
@@ -125,7 +129,7 @@ class JobController extends BaseController
     
     private function getRelatedJobs($currentJobId, $categoryId, $limit = 3)
     {
-        return $this->jobModel->select('jobs.*, companies.name as company_name')
+        return $this->jobModel->select('jobs.*, companies.name as company_name, companies.slug as company_slug')
                              ->join('companies', 'companies.id = jobs.company_id')
                              ->where('jobs.id !=', $currentJobId)
                              ->where('jobs.category_id', $categoryId)

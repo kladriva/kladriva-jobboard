@@ -186,7 +186,7 @@
                                  alt="<?= $job['company_name'] ?>">
                         </div>
                         <?php endif; ?>
-                        <a href="<?= site_url('entreprise/' . $job['company_slug'] ?? '') ?>" class="btn btn-outline btn-block">
+                        <a href="<?= site_url('entreprise/' . ($job['company_slug'] ?? '')) ?>" class="btn btn-outline btn-block">
                             Voir l'entreprise
                         </a>
                     </div>

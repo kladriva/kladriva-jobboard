@@ -9,6 +9,9 @@ use CodeIgniter\Router\RouteCollection;
 // Route par défaut
 $routes->get('/', 'Home::index');
 
+// Route de débogage (temporaire)
+$routes->get('debug', 'Debug::index');
+
 // Routes principales
 $routes->get('emplois', 'JobController::index');
 $routes->get('emploi/(:segment)', 'JobController::show/$1');
@@ -58,16 +61,13 @@ $routes->get('conseil-entreprise', 'Business::consulting');
 $routes->get('transformation', 'Business::transformation');
 $routes->get('partenariats', 'Business::partnerships');
 
-       // Routes de test
-       $routes->get('test', 'Test::index');
-       $routes->get('test/auth', 'Test::auth');
-       $routes->get('test/dropdown', 'Test::dropdown');
+       
 
 // Routes des erreurs
 $routes->get('errors/404', 'Errors::notFound');
 $routes->get('errors/500', 'Errors::serverError');
 
-service('auth')->routes($routes);
+// service('auth')->routes($routes);
 
 // Routes API (pour les agents IA et MCP)
 $routes->group('api', ['namespace' => 'App\Controllers\Api'], function($routes) {

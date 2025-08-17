@@ -76,7 +76,7 @@ class Auth extends ShieldAuth
     public array $redirects = [
         'register'          => '/',
         'login'             => '/',
-        'logout'            => 'login',
+        'logout'            => '/',
         'force_reset'       => '/',
         'permission_denied' => '/',
         'group_denied'      => '/',
@@ -500,6 +500,18 @@ class Auth extends ShieldAuth
         $url = setting('Auth.redirects')['group_denied'];
 
         return $this->getUrl($url);
+    }
+
+    /**
+     * --------------------------------------------------------------------
+     * Validation Customization
+     * --------------------------------------------------------------------
+     * Désactiver la validation Shield par défaut pour utiliser notre validation personnalisée
+     */
+    public function getValidationRules(): array
+    {
+        $validation = new \App\Validation\AuthValidation();
+        return $validation->getRegistrationRules();
     }
 
     /**
