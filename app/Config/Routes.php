@@ -16,9 +16,12 @@ $routes->get('debug', 'Debug::index');
 $routes->get('emplois', 'JobController::index');
 $routes->get('emploi/(:segment)', 'JobController::show/$1');
 
+// Redirection emplois/admin vers admin (pour éviter les 404)
+$routes->get('emplois/admin', 'Admin::index');
+
 // Routes en anglais pour les emplois
 $routes->get('jobs', 'JobController::index');
-$routes->get('jobs/(:segment)', 'JobController::show/$1');
+$routes->get('job/(:segment)', 'JobController::show/$1');
 $routes->get('consultants', 'Home::consultants');
 $routes->get('mentoring', 'Home::mentoring');
 $routes->get('entreprises', 'Home::entreprises');
@@ -79,34 +82,15 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function($routes) 
 // Routes d'administration (à protéger)
 $routes->group('admin', ['namespace' => 'App\Controllers', 'filter' => 'auth'], function($routes) {
     $routes->get('/', 'Admin::index');
-    $routes->match(['get', 'post'], 'users', 'Admin::users');
-    $routes->match(['get', 'post'], 'jobs', 'Admin::jobs');
-    $routes->match(['get', 'post'], 'companies', 'Admin::companies');
-    $routes->match(['get', 'post'], 'job-categories', 'Admin::jobCategories');
     
-    // Routes GET spécifiques pour GroceryCRUD (affichage des formulaires)
-    $routes->get('job-categories/add', 'Admin::jobCategories');
-    $routes->get('job-categories/edit/(:num)', 'Admin::jobCategories/$1');
-    $routes->get('jobs/add', 'Admin::jobs');
-    $routes->get('jobs/edit/(:num)', 'Admin::jobs/$1');
-    $routes->get('companies/add', 'Admin::companies');
-    $routes->get('companies/edit/(:num)', 'Admin::companies/$1');
-    $routes->get('users/add', 'Admin::users');
-    $routes->get('users/edit/(:num)', 'Admin::users/$1');
+    // Routes d'administration avec GroceryCRUD
+    $routes->match(['get', 'post'], 'users(/.*)?', 'Admin::users');
+    $routes->match(['get', 'post'], 'jobs(/.*)?', 'Admin::jobs');
+    $routes->match(['get', 'post'], 'companies(/.*)?', 'Admin::companies');
+    $routes->match(['get', 'post'], 'job-categories(/.*)?', 'Admin::jobCategories');
     
-    // Routes POST pour GroceryCRUD (traitement des formulaires)
-    $routes->post('job-categories/add', 'Admin::jobCategories');
-    $routes->post('job-categories/edit', 'Admin::jobCategories');
-    $routes->post('job-categories/delete', 'Admin::jobCategories');
-    $routes->post('jobs/add', 'Admin::jobs');
-    $routes->post('jobs/edit', 'Admin::jobs');
-    $routes->post('jobs/delete', 'Admin::jobs');
-    $routes->post('companies/add', 'Admin::companies');
-    $routes->post('companies/edit', 'Admin::companies');
-    $routes->post('companies/delete', 'Admin::companies');
-    $routes->post('users/add', 'Admin::users');
-    $routes->post('users/edit', 'Admin::users');
-    $routes->post('users/delete', 'Admin::users');
+    // Route pour mettre à jour les slugs
+    $routes->get('admin/update-slugs', 'Admin::updateCompanySlugs');
 });
 
 // Routes des agents IA et MCP

@@ -6,15 +6,16 @@
     <div class="container">
         <div class="error-content">
             <div class="error-visual">
-                <div class="error-number">404</div>
+                <div class="error-number">500</div>
                 <div class="error-icon">
-                    <i class="fas fa-search"></i>
+                    <i class="fas fa-exclamation-triangle"></i>
                 </div>
             </div>
             
-            <h1 class="error-title">Page introuvable</h1>
+            <h1 class="error-title">Erreur serveur</h1>
             <p class="error-description">
-                Oups ! Il semble que la page que vous recherchez n'existe pas ou ait été déplacée.
+                Oups ! Une erreur interne s'est produite sur notre serveur. 
+                Nos équipes techniques ont été notifiées et travaillent à résoudre le problème.
             </p>
             
             <div class="error-actions">
@@ -29,24 +30,23 @@
             </div>
             
             <div class="error-suggestions">
-                <h3>Pages populaires</h3>
+                <h3>Que pouvez-vous faire ?</h3>
                 <div class="suggestions-grid">
-                    <a href="<?= site_url('/jobs') ?>" class="suggestion-link">
-                        <i class="fas fa-briefcase"></i>
-                        Emplois IT
-                    </a>
-                    <a href="<?= site_url('/consultants') ?>" class="suggestion-link">
-                        <i class="fas fa-user-tie"></i>
-                        Consultants
-                    </a>
-                    <a href="<?= site_url('/mentoring') ?>" class="suggestion-link">
-                        <i class="fas fa-graduation-cap"></i>
-                        Mentoring
-                    </a>
-                    <a href="<?= site_url('/entreprises') ?>" class="suggestion-link">
-                        <i class="fas fa-building"></i>
-                        Entreprises
-                    </a>
+                    <div class="suggestion-item">
+                        <i class="fas fa-refresh"></i>
+                        <h4>Actualiser la page</h4>
+                        <p>Essayez de recharger la page dans quelques instants</p>
+                    </div>
+                    <div class="suggestion-item">
+                        <i class="fas fa-clock"></i>
+                        <h4>Attendre un moment</h4>
+                        <p>Le problème peut être temporaire</p>
+                    </div>
+                    <div class="suggestion-item">
+                        <i class="fas fa-arrow-left"></i>
+                        <h4>Retourner en arrière</h4>
+                        <p>Utilisez le bouton retour de votre navigateur</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -56,7 +56,7 @@
 <style>
 .error-section {
     padding: var(--spacing-3xl) 0;
-    background: linear-gradient(135deg, var(--primary-50) 0%, var(--secondary-50) 100%);
+    background: linear-gradient(135deg, var(--error-50) 0%, var(--warning-50) 100%);
     min-height: 70vh;
     display: flex;
     align-items: center;
@@ -76,7 +76,7 @@
 .error-number {
     font-size: 8rem;
     font-weight: 900;
-    color: var(--primary-600);
+    color: var(--error-600);
     line-height: 1;
     margin-bottom: var(--spacing-lg);
 }
@@ -87,7 +87,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 3rem;
-    color: var(--secondary-400);
+    color: var(--warning-400);
     opacity: 0.3;
 }
 
@@ -119,7 +119,7 @@
     margin-top: var(--spacing-lg);
 }
 
-.suggestion-link {
+.suggestion-item {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -127,21 +127,26 @@
     padding: var(--spacing-lg);
     background: white;
     border-radius: var(--radius-lg);
-    text-decoration: none;
-    color: var(--neutral-700);
-    transition: var(--transition-fast);
     border: 1px solid var(--neutral-200);
+    text-align: center;
 }
 
-.suggestion-link:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    color: var(--primary-600);
+.suggestion-item i {
+    font-size: var(--font-size-3xl);
+    color: var(--error-500);
+    margin-bottom: var(--spacing-sm);
 }
 
-.suggestion-link i {
-    font-size: var(--font-size-2xl);
-    color: var(--primary-500);
+.suggestion-item h4 {
+    color: var(--neutral-800);
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-xs);
+}
+
+.suggestion-item p {
+    color: var(--neutral-600);
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
 }
 
 @media (max-width: 768px) {

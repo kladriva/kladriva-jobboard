@@ -74,7 +74,6 @@
                 <div class="jobs-sort">
                     <select name="sort" id="sort-jobs">
                         <option value="recent">Plus récents</option>
-                        <option value="featured">Mis en avant</option>
                         <option value="salary">Salaire</option>
                     </select>
                 </div>
@@ -89,13 +88,7 @@
             <?php else: ?>
             <div class="jobs-grid">
                 <?php foreach ($jobs as $job): ?>
-                <article class="job-card <?= $job['is_featured'] ? 'featured' : '' ?>">
-                    <?php if ($job['is_featured']): ?>
-                    <div class="job-badge featured">
-                        <i class="fas fa-star"></i>
-                        Mis en avant
-                    </div>
-                    <?php endif; ?>
+                <article class="job-card">
                     
                     <div class="job-header">
                         <div class="company-logo">
@@ -110,7 +103,7 @@
                         </div>
                         <div class="job-info">
                             <h3 class="job-title">
-                                <a href="<?= site_url('emploi/' . $job['slug']) ?>"><?= $job['title'] ?></a>
+                                <a href="<?= site_url('job/' . $job['slug']) ?>"><?= $job['title'] ?></a>
                             </h3>
                             <p class="company-name"><?= $job['company_name'] ?></p>
                             <div class="job-meta">
@@ -141,7 +134,7 @@
                     </div>
                     
                     <div class="job-actions">
-                        <a href="<?= site_url('emploi/' . $job['slug']) ?>" class="btn btn-outline">
+                        <a href="<?= site_url('job/' . $job['slug']) ?>" class="btn btn-outline">
                             Voir l'offre
                         </a>
                         <a href="<?= site_url('contact?job=' . $job['id']) ?>" class="btn btn-primary">

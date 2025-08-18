@@ -13,7 +13,7 @@
                 </div>
             </div>
             <h1 class="auth-title">Bienvenue</h1>
-            <p class="auth-subtitle">Connectez-vous à votre espace JobBoard</p>
+                            <p class="auth-subtitle">Connectez-vous à votre espace Kladriva</p>
         </div>
         
         <!-- Formulaire principal -->

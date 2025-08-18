@@ -71,8 +71,7 @@ class JobController extends BaseController
         }
         
         // Exécuter la requête
-        $jobs = $builder->orderBy('jobs.is_featured', 'DESC')
-                        ->orderBy('jobs.created_at', 'DESC')
+        $jobs = $builder->orderBy('jobs.created_at', 'DESC')
                         ->findAll();
         
         // Récupérer les informations de l'utilisateur connecté
@@ -93,11 +92,6 @@ class JobController extends BaseController
     
     public function show($slug)
     {
-        // Vérifier à nouveau l'authentification
-        if (!auth()->loggedIn()) {
-            return redirect()->to('/login')->with('error', 'Vous devez être connecté pour voir les détails des emplois.');
-        }
-        
         // Récupérer l'emploi avec toutes les relations (incluant company_name)
         $job = $this->jobModel->getJobWithRelations(null, $slug);
         
@@ -113,7 +107,7 @@ class JobController extends BaseController
             log_message('error', 'Erreur lors de l\'incrémentation des vues: ' . $e->getMessage());
         }
         
-        // Récupérer les informations de l'utilisateur connecté
+        // Récupérer les informations de l'utilisateur connecté (optionnel)
         $user = auth()->user();
         
         $data = [
@@ -121,7 +115,7 @@ class JobController extends BaseController
             'page_description' => substr(strip_tags($job['description']), 0, 160),
             'job' => $job,
             'related_jobs' => $this->getRelatedJobs($job['id'], $job['category_id']),
-            'user' => $user // Passer l'utilisateur connecté à la vue
+            'user' => $user // Passer l'utilisateur connecté à la vue (peut être null)
         ];
         
         return view('jobs/show', $data);

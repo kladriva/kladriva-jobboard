@@ -1,9 +1,9 @@
 // ===== MAIN JAVASCRIPT FILE =====
-// JobBoard - Plateforme de recrutement
+// Kladriva - Plateforme de recrutement
 
 document.addEventListener('DOMContentLoaded', function() {
     
-    console.log('🚀 JobBoard JavaScript initialisé');
+    console.log('🚀 Kladriva JavaScript initialisé');
     console.log('🔍 Recherche des dropdowns...');
     
     // ===== NAVIGATION MOBILE =====
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // ===== INITIALIZATION COMPLETE =====
-    console.log('JobBoard - JavaScript initialisé avec succès');
+    console.log('Kladriva - JavaScript initialisé avec succès');
     
 });
 

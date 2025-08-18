@@ -13,7 +13,7 @@
                 </div>
             </div>
             <h1 class="auth-title">Rejoignez-nous</h1>
-            <p class="auth-subtitle">Créez votre compte JobBoard et commencez votre aventure</p>
+                            <p class="auth-subtitle">Créez votre compte Kladriva et commencez votre aventure</p>
         </div>
         
         <!-- Formulaire principal -->

@@ -8,7 +8,7 @@
         <nav class="breadcrumb-nav">
             <a href="<?= site_url('/') ?>">Accueil</a>
             <i class="fas fa-chevron-right"></i>
-            <a href="<?= site_url('emplois') ?>">Emplois</a>
+                                    <a href="<?= site_url('jobs') ?>">Emplois</a>
             <i class="fas fa-chevron-right"></i>
             <span><?= $job['title'] ?></span>
         </nav>
@@ -62,12 +62,7 @@
                         <span class="job-category-main" style="background-color: <?= $job['category_color'] ?>20; color: <?= $job['category_color'] ?>">
                             <?= $job['category_name'] ?>
                         </span>
-                        <?php if ($job['is_featured']): ?>
-                        <span class="job-badge-main featured">
-                            <i class="fas fa-star"></i>
-                            Mis en avant
-                        </span>
-                        <?php endif; ?>
+
                         <?php if ($job['is_urgent']): ?>
                         <span class="job-badge-main urgent">
                             <i class="fas fa-exclamation-triangle"></i>
@@ -257,7 +252,7 @@
             <?php foreach ($related_jobs as $related_job): ?>
             <article class="related-job-card">
                 <h3 class="related-job-title">
-                    <a href="<?= site_url('emploi/' . $related_job['slug']) ?>"><?= $related_job['title'] ?></a>
+                                            <a href="<?= site_url('job/' . $related_job['slug']) ?>"><?= $related_job['title'] ?></a>
                 </h3>
                 <p class="related-company-name"><?= $related_job['company_name'] ?></p>
                 <div class="related-job-meta">
@@ -270,7 +265,7 @@
                         <?= ucfirst($related_job['contract_type']) ?>
                     </span>
                 </div>
-                <a href="<?= site_url('emploi/' . $related_job['slug']) ?>" class="btn btn-outline btn-sm">
+                <a href="<?= site_url('job/' . $related_job['slug']) ?>" class="btn btn-outline btn-sm">
                     Voir l'offre
                 </a>
             </article>

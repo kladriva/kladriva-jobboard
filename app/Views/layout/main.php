@@ -5,25 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- SEO Meta Tags -->
-    <title><?= isset($page_title) ? $page_title : 'JobBoard - Plateforme de recrutement' ?></title>
-    <meta name="description" content="<?= isset($page_description) ? $page_description : 'JobBoard connecte les entreprises aux meilleurs consultants IT et accompagne les talents dans leur développement professionnel grâce à un système de mentoring innovant.' ?>">
+    <title><?= isset($page_title) ? $page_title : 'Kladriva - Plateforme de recrutement' ?></title>
+    <meta name="description" content="<?= isset($page_description) ? $page_description : 'Kladriva connecte les entreprises aux meilleurs consultants IT et accompagne les talents dans leur développement professionnel grâce à un système de mentoring innovant.' ?>">
     <meta name="keywords" content="recrutement IT, conseil en croissance, consultants IT, mentoring, développement de carrière, emploi tech, France">
-    <meta name="author" content="JobBoard">
+    <meta name="author" content="Kladriva">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?= current_url() ?>">
-    <meta property="og:title" content="<?= isset($page_title) ? $page_title : 'JobBoard - Plateforme de recrutement' ?>">
-    <meta property="og:description" content="<?= isset($page_description) ? $page_description : 'JobBoard connecte les entreprises aux meilleurs consultants IT et accompagne les talents dans leur développement professionnel.' ?>">
-    <meta property="og:image" content="<?= base_url('img/jobboard-og.jpg') ?>">
+    <meta property="og:title" content="<?= isset($page_title) ? $page_title : 'Kladriva - Plateforme de recrutement' ?>">
+    <meta property="og:description" content="<?= isset($page_description) ? $page_description : 'Kladriva connecte les entreprises aux meilleurs consultants IT et accompagne les talents dans leur développement professionnel.' ?>">
+    <meta property="og:image" content="<?= base_url('img/kladriva-og.jpg') ?>">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="<?= current_url() ?>">
-    <meta property="twitter:title" content="<?= isset($page_title) ? $page_title : 'JobBoard - Plateforme de recrutement' ?>">
-    <meta property="twitter:description" content="<?= isset($page_description) ? $page_description : 'JobBoard connecte les entreprises aux meilleurs consultants IT et accompagne les talents dans leur développement professionnel.' ?>">
-    <meta property="twitter:image" content="<?= base_url('img/jobboard-og.jpg') ?>">
+    <meta property="twitter:title" content="<?= isset($page_title) ? $page_title : 'Kladriva - Plateforme de recrutement' ?>">
+    <meta property="twitter:description" content="<?= isset($page_description) ? $page_description : 'Kladriva connecte les entreprises aux meilleurs consultants IT et accompagne les talents dans leur développement professionnel.' ?>">
+    <meta property="twitter:image" content="<?= base_url('img/kladriva-og.jpg') ?>">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="<?= base_url('img/logo-header.png') ?>">
@@ -46,13 +46,13 @@
     {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "JobBoard",
+        "name": "Kladriva",
         "description": "Plateforme de recrutement IT et conseil en croissance des entreprises",
         "url": "<?= base_url() ?>",
-        "logo": "<?= base_url('img/jobboard-logo.png') ?>",
+        "logo": "<?= base_url('img/kladriva-logo.png') ?>",
         "sameAs": [
-            "https://linkedin.com/company/jobboard",
-            "https://twitter.com/jobboard"
+            "https://linkedin.com/company/kladriva",
+            "https://twitter.com/kladriva"
         ]
     }
     </script>
