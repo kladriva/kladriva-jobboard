@@ -30,9 +30,10 @@ class Admin extends BaseController
     {
         $crud = new GroceryCrud();
 
+        // Configuration de base COMPLÈTE pour l'ajout/édition
         $crud->setTable('users');
         $crud->setSubject('Utilisateur', 'Utilisateurs');
-        // $crud->setPrimaryKey('id', 'users'); // Commenté si non supporté
+        $crud->setPrimaryKey('id', 'users');
         
         // Colonnes affichées (selon la structure de CodeIgniter Shield)
         $crud->columns(['username', 'email', 'created_at']);
@@ -68,9 +69,13 @@ class Admin extends BaseController
         $crud->displayAs('last_name', 'Nom');
         $crud->displayAs('updated_at', 'Dernière modification');
 
-    $output = $crud->render();
-    return view('admin_view', (array)$output);
-}
+        // ACTIVER les opérations CRUD
+        $crud->addFields(['username', 'email', 'first_name', 'last_name']);
+        $crud->editFields(['username', 'email', 'first_name', 'last_name']);
+
+        $output = $crud->render();
+        return view('admin_view', (array)$output);
+    }
 
     // ===== GESTION DES EMPLOIS =====
     
@@ -83,15 +88,16 @@ class Admin extends BaseController
         try {
             $crud = new GroceryCrud();
 
-            // Configuration de base minimale
+            // Configuration de base COMPLÈTE pour l'ajout/édition
             $crud->setTable('jobs');
             $crud->setSubject('Emploi', 'Emplois');
+            $crud->setPrimaryKey('id', 'jobs');
             
             // Colonnes affichées (simplifiées)
-            $crud->columns(['title', 'location', 'contract_type', 'status', 'created_at']);
+            $crud->columns(['title', 'company_id', 'category_id', 'location', 'contract_type', 'status', 'created_at']);
             
             // Champs requis minimaux
-            $crud->requiredFields(['title', 'description', 'location']);
+            $crud->requiredFields(['title', 'description', 'location', 'company_id', 'category_id']);
             
             // Configuration des champs de type enum
             $crud->fieldType('status', 'dropdown', [
@@ -109,11 +115,36 @@ class Admin extends BaseController
                 'alternance' => 'Alternance'
             ]);
             
+            // Configuration des relations (entreprises et catégories)
+            $crud->setRelation('company_id', 'companies', 'name');
+            $crud->setRelation('category_id', 'job_categories', 'name');
+            
             // Configuration des champs de texte
             $crud->fieldType('description', 'text');
             
             // Personnalisation des labels
             $crud->displayAs('created_at', 'Date de création');
+            $crud->displayAs('company_id', 'Entreprise');
+            $crud->displayAs('category_id', 'Catégorie');
+            
+            // ACTIVER les opérations CRUD avec le champ slug
+            $crud->addFields(['title', 'slug', 'description', 'company_id', 'category_id', 'location', 'contract_type', 'status']);
+            $crud->editFields(['title', 'slug', 'description', 'company_id', 'category_id', 'location', 'contract_type', 'status']);
+            
+            // Callback simple pour générer le slug
+            $crud->callbackBeforeInsert(function ($stateParameters) {
+                if (empty($stateParameters['data']['slug'])) {
+                    $stateParameters['data']['slug'] = $this->generateSlug($stateParameters['data']['title']);
+                }
+                return $stateParameters;
+            });
+            
+            $crud->callbackBeforeUpdate(function ($stateParameters) {
+                if (empty($stateParameters['data']['slug'])) {
+                    $stateParameters['data']['slug'] = $this->generateSlug($stateParameters['data']['title']);
+                }
+                return $stateParameters;
+            });
             
             // Rendu final
             $output = $crud->render();
@@ -133,6 +164,63 @@ class Admin extends BaseController
             return view('admin_dashboard', $data);
         }
     }
+    
+    /**
+     * Génère un slug à partir d'un titre
+     */
+    private function generateSlug($title)
+    {
+        // Convertir en minuscules et remplacer les espaces par des tirets
+        $slug = strtolower(trim($title));
+        $slug = preg_replace('/[^a-z0-9\s-]/', '', $slug);
+        $slug = preg_replace('/[\s-]+/', '-', $slug);
+        $slug = trim($slug, '-');
+        
+        // Ajouter un timestamp si le slug est vide
+        if (empty($slug)) {
+            $slug = 'emploi-' . time();
+        }
+        
+        return $slug;
+    }
+    
+    /**
+     * Génère un slug à partir du nom d'une entreprise
+     */
+    private function generateCompanySlug($companyName)
+    {
+        // Convertir en minuscules et remplacer les espaces par des tirets
+        $slug = strtolower(trim($companyName));
+        $slug = preg_replace('/[^a-z0-9\s-]/', '', $slug);
+        $slug = preg_replace('/[\s-]+/', '-', $slug);
+        $slug = trim($slug, '-');
+        
+        // Ajouter un timestamp si le slug est vide
+        if (empty($slug)) {
+            $slug = 'entreprise-' . time();
+        }
+        
+        return $slug;
+    }
+    
+    /**
+     * Génère un slug à partir du nom d'une catégorie
+     */
+    private function generateCategorySlug($categoryName)
+    {
+        // Convertir en minuscules et remplacer les espaces par des tirets
+        $slug = strtolower(trim($categoryName));
+        $slug = preg_replace('/[^a-z0-9\s-]/', '', $slug);
+        $slug = preg_replace('/[\s-]+/', '-', $slug);
+        $slug = trim($slug, '-');
+        
+        // Ajouter un timestamp si le slug est vide
+        if (empty($slug)) {
+            $slug = 'categorie-' . time();
+        }
+        
+        return $slug;
+    }
 
     // ===== GESTION DES ENTREPRISES =====
     
@@ -145,11 +233,12 @@ class Admin extends BaseController
         try {
             $crud = new GroceryCrud();
 
+            // Configuration de base avec slug
             $crud->setTable('companies');
             $crud->setSubject('Entreprise', 'Entreprises');
             
-            // Colonnes affichées (simplifiées)
-            $crud->columns(['name', 'industry', 'location', 'created_at']);
+            // Colonnes affichées
+            $crud->columns(['name', 'slug', 'industry', 'location', 'created_at']);
             
             // Champs requis
             $crud->requiredFields(['name']);
@@ -168,6 +257,28 @@ class Admin extends BaseController
             
             // Personnalisation des labels
             $crud->displayAs('created_at', 'Date de création');
+            $crud->displayAs('slug', 'Slug URL');
+            
+            // Configuration avec slug
+            $crud->addFields(['name', 'slug', 'description', 'industry', 'size', 'location']);
+            $crud->editFields(['name', 'slug', 'description', 'industry', 'size', 'location']);
+            
+            // Callback simple pour générer le slug automatiquement
+            $crud->callbackBeforeInsert(function ($stateParameters) {
+                // Générer le slug si vide
+                if (empty($stateParameters['data']['slug'])) {
+                    $stateParameters['data']['slug'] = $this->generateCompanySlug($stateParameters['data']['name']);
+                }
+                return $stateParameters;
+            });
+            
+            $crud->callbackBeforeUpdate(function ($stateParameters) {
+                // Générer le slug si vide
+                if (empty($stateParameters['data']['slug'])) {
+                    $stateParameters['data']['slug'] = $this->generateCompanySlug($stateParameters['data']['name']);
+                }
+                return $stateParameters;
+            });
             
             $output = $crud->render();
             return view('admin_view', (array)$output);
@@ -197,11 +308,13 @@ class Admin extends BaseController
         try {
             $crud = new GroceryCrud();
 
+            // Configuration de base COMPLÈTE pour l'ajout/édition
             $crud->setTable('job_categories');
             $crud->setSubject('Catégorie d\'emploi', 'Catégories d\'emplois');
+            $crud->setPrimaryKey('id', 'job_categories');
             
             // Colonnes affichées (simplifiées)
-            $crud->columns(['name', 'icon', 'color', 'created_at']);
+            $crud->columns(['name', 'slug', 'icon', 'color', 'created_at']);
             
             // Champs requis
             $crud->requiredFields(['name']);
@@ -231,9 +344,29 @@ class Admin extends BaseController
             $crud->displayAs('created_at', 'Date de création');
             $crud->displayAs('color', 'Couleur');
             $crud->displayAs('icon', 'Icône');
+            $crud->displayAs('slug', 'Slug URL');
+            
+            // ACTIVER les opérations CRUD avec le champ slug
+            $crud->addFields(['name', 'slug', 'icon', 'color', 'is_active']);
+            $crud->editFields(['name', 'slug', 'icon', 'color', 'is_active']);
+            
+            // Callback pour générer automatiquement le slug
+            $crud->callbackBeforeInsert(function ($stateParameters) {
+                if (empty($stateParameters['data']['slug'])) {
+                    $stateParameters['data']['slug'] = $this->generateCategorySlug($stateParameters['data']['name']);
+                }
+                return $stateParameters;
+            });
+            
+            $crud->callbackBeforeUpdate(function ($stateParameters) {
+                if (empty($stateParameters['data']['slug'])) {
+                    $stateParameters['data']['slug'] = $this->generateCategorySlug($stateParameters['data']['name']);
+                }
+                return $stateParameters;
+            });
             
             $output = $crud->render();
-            return view('admin_view', (array)$output);
+            return view('admin_view', $output);
             
         } catch (Exception $e) {
             log_message('error', 'Erreur dans la gestion des catégories : ' . $e->getMessage());
@@ -246,6 +379,49 @@ class Admin extends BaseController
             ];
             
             return view('admin_dashboard', $data);
+        }
+    }
+
+    /**
+     * Met à jour les slugs des entreprises existantes qui n'en ont pas
+     */
+    public function updateCompanySlugs()
+    {
+        try {
+            $db = \Config\Database::connect();
+            
+            // Récupérer toutes les entreprises sans slug
+            $companies = $db->table('companies')
+                           ->where('slug IS NULL OR slug = ""')
+                           ->get()
+                           ->getResultArray();
+            
+            $updated = 0;
+            foreach ($companies as $company) {
+                $slug = $this->generateCompanySlug($company['name']);
+                
+                // Vérifier l'unicité
+                $existingSlug = $db->table('companies')
+                                  ->where('slug', $slug)
+                                  ->where('id !=', $company['id'])
+                                  ->get()
+                                  ->getRow();
+                
+                if ($existingSlug) {
+                    $slug = $slug . '-' . $company['id'];
+                }
+                
+                $db->table('companies')
+                   ->where('id', $company['id'])
+                   ->update(['slug' => $slug]);
+                
+                $updated++;
+            }
+            
+            return "✅ $updated entreprises mises à jour avec des slugs";
+            
+        } catch (Exception $e) {
+            return "❌ Erreur : " . $e->getMessage();
         }
     }
 }

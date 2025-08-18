@@ -26,14 +26,19 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        //'hostname'     => '84.247.187.217',
         'hostname'     => 'localhost',
+<<<<<<< HEAD
         'password'     => 'Phil1v21!!!',
         'username'     => 'rxpz6462_recrutementIT',
         'database'     => 'rxpz6462_ITbd',
         //'username'     => 'root',
         //'password'     => '',
         //'database'     => 'jobboard',
+=======
+        'username'     => '',
+        'password'     => '',
+        'database'     => '',
+>>>>>>> 26ad3aef211d3e6006dbaa74ad1488b1fb9d2dac
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,

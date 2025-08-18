@@ -65,4 +65,27 @@ class GroceryCrud
      */
     public $xss_clean = false;
 
+    /**
+     * Allow GroceryCRUD to handle AJAX requests properly
+     * @var bool
+     */
+    public $ajax_list = true;
+
+    /**
+     * Enable CSRF protection for forms
+     * @var bool
+     */
+    public $csrf_protection = true;
+
+    /**
+     * Set the default order by field
+     * @var string
+     */
+    public $default_order_by = 'id';
+
+    /**
+     * Set the default order direction
+     * @var string
+     */
+    public $default_order_direction = 'desc';
 }

@@ -4,8 +4,7 @@
             <div class="nav-container">
                 <div class="nav-brand">
                     <a href="<?= site_url('/') ?>" class="logo">
-                        <img src="<?= base_url('img/logo.png') ?>" alt="JobBoard" class="logo-image">
-                        <span class="logo-tagline">Accélérer la croissance</span>
+                        <img src="<?= base_url('img/logo.png') ?>" alt="Kladriva" class="logo-image">
                     </a>
                 </div>
                 
@@ -20,6 +19,16 @@
                         <li class="nav-item">
                             <a href="<?= site_url('/contact') ?>" class="nav-link">Contact</a>
                         </li>
+                        
+                        <!-- Boutons d'authentification pour mobile -->
+                        <?php if (!is_logged_in()): ?>
+                        <li class="nav-item nav-auth-mobile">
+                            <div class="nav-auth-buttons">
+                                <a href="<?= site_url('/connexion') ?>" class="btn btn-outline btn-mobile">Connexion</a>
+                                <a href="<?= site_url('/inscription') ?>" class="btn btn-primary btn-mobile">Inscription</a>
+                            </div>
+                        </li>
+                        <?php endif; ?>
                     </ul>
                 </div>
                 

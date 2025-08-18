@@ -10,10 +10,10 @@
                 Accélérez la <span class="highlight">croissance</span> de votre entreprise IT
             </h1>
             <p class="hero-subtitle">
-                JobBoard connecte les entreprises aux meilleurs consultants IT et accompagne les talents dans leur développement professionnel grâce à un système de mentoring innovant.
+                Kladriva connecte les entreprises aux meilleurs consultants IT et accompagne les talents dans leur développement professionnel grâce à un système de mentoring innovant.
             </p>
             <div class="hero-actions">
-                <a href="<?= site_url('/emplois') ?>" class="btn btn-primary btn-large">
+                <a href="<?= site_url('/jobs') ?>" class="btn btn-primary btn-large">
                     <i class="fas fa-search"></i>
                     Trouver un emploi
                 </a>

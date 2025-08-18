@@ -31,7 +31,7 @@ class Dashboard extends Controller
         }
         
         $data = [
-            'title' => 'Tableau de bord - JobBoard',
+            'title' => 'Tableau de bord - Kladriva',
             'user' => $user
         ];
 
@@ -50,7 +50,7 @@ class Dashboard extends Controller
         }
         
         $data = [
-            'title' => 'Mon Profil - JobBoard',
+            'title' => 'Mon Profil - Kladriva',
             'user' => $user
         ];
 
@@ -69,7 +69,7 @@ class Dashboard extends Controller
         }
         
         $data = [
-            'title' => 'Paramètres - JobBoard',
+            'title' => 'Paramètres - Kladriva',
             'user' => $user
         ];
 

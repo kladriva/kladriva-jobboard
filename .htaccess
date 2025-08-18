@@ -1,0 +1,21 @@
+RewriteEngine On
+
+# Redirect all requests to the public folder
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]
+
+# Security: Prevent access to sensitive directories
+<Files "*.env">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "*.log">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Prevent access to app and writable directories
+RedirectMatch 403 ^/app/?$
+RedirectMatch 403 ^/writable/?$
+RedirectMatch 403 ^/vendor/?$

@@ -27,7 +27,7 @@
             <div class="dashboard-card">
                 <div class="dashboard-card-body">
                     <div class="quick-actions">
-                        <a href="<?= base_url('emplois') ?>" class="quick-action-btn">
+                        <a href="<?= base_url('jobs') ?>" class="quick-action-btn">
                             <i class="fas fa-search quick-action-icon text-primary"></i>
                             <span>Rechercher un emploi</span>
                         </a>

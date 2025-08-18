@@ -16,7 +16,7 @@ class Job extends Model
         'title', 'slug', 'company_id', 'category_id', 'description', 'requirements',
         'benefits', 'salary_min', 'salary_max', 'salary_currency', 'salary_period',
         'location', 'location_type', 'contract_type', 'experience_level',
-        'skills_required', 'technologies', 'status', 'is_featured', 'is_urgent',
+        'skills_required', 'technologies', 'status', 'is_urgent',
         'published_at', 'expires_at', 'views_count', 'applications_count'
     ];
     
@@ -86,9 +86,8 @@ class Job extends Model
                     ->groupEnd();
         }
         
-        return $builder->orderBy('jobs.is_featured', 'DESC')
-                      ->orderBy('jobs.published_at', 'DESC')
-                      ->paginate(12);
+                return $builder->orderBy('jobs.published_at', 'DESC')
+                       ->paginate(12);
     }
     
     public function incrementViews($id)

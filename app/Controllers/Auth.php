@@ -26,8 +26,8 @@ class Auth extends BaseController
         }
 
         return view('auth/login', [
-            'page_title' => 'Connexion - JobBoard',
-            'page_description' => 'Connectez-vous à votre espace personnel JobBoard'
+            'page_title' => 'Connexion - Kladriva',
+            'page_description' => 'Connectez-vous à votre espace personnel Kladriva'
         ]);
     }
 
@@ -63,8 +63,8 @@ class Auth extends BaseController
         }
 
         return view('auth/register', [
-            'page_title' => 'Inscription - JobBoard',
-            'page_description' => 'Créez votre compte JobBoard et rejoignez notre communauté'
+            'page_title' => 'Inscription - Kladriva',
+            'page_description' => 'Créez votre compte Kladriva et rejoignez notre communauté'
         ]);
     }
 
@@ -141,8 +141,8 @@ class Auth extends BaseController
         $user = $this->auth->getUser();
         
         return view('auth/profile', [
-            'page_title' => 'Mon Profil - JobBoard',
-            'page_description' => 'Gérez votre profil personnel JobBoard',
+            'page_title' => 'Mon Profil - Kladriva',
+            'page_description' => 'Gérez votre profil personnel Kladriva',
             'user' => $user
         ]);
     }
