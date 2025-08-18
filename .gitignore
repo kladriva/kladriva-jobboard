@@ -3,3 +3,4 @@ writable/session/
 writable/logs/
 public/error_log
 writable/logs/*.log
+*.backup
