@@ -366,7 +366,7 @@ class Admin extends BaseController
             });
             
             $output = $crud->render();
-            return view('admin_view', $output);
+            return view('admin_view', (array) $output);
             
         } catch (Exception $e) {
             log_message('error', 'Erreur dans la gestion des catégories : ' . $e->getMessage());
