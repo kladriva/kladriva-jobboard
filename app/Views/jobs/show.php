@@ -46,7 +46,15 @@
                         </div>
                         <div class="meta-item">
                             <i class="fas fa-clock"></i>
-                            <span>Publié le <?= date('d/m/Y', strtotime($job['published_at'])) ?></span>
+                            <span>
+                                <?php 
+                                if (!empty($job['published_at']) && $job['published_at'] !== '0000-00-00 00:00:00') {
+                                    echo 'Publié le ' . date('d/m/Y', strtotime($job['published_at']));
+                                } else {
+                                    echo 'Publié le ' . date('d/m/Y', strtotime($job['created_at']));
+                                }
+                                ?>
+                            </span>
                         </div>
                         <?php if (!empty($job['salary_min'])): ?>
                         <div class="meta-item">

@@ -115,6 +115,16 @@
                                     <i class="fas fa-briefcase"></i>
                                     <?= ucfirst($job['contract_type']) ?>
                                 </span>
+                                <span class="job-date">
+                                    <i class="fas fa-clock"></i>
+                                    <?php 
+                                    if (!empty($job['published_at']) && $job['published_at'] !== '0000-00-00 00:00:00') {
+                                        echo date('d/m/Y', strtotime($job['published_at']));
+                                    } else {
+                                        echo date('d/m/Y', strtotime($job['created_at']));
+                                    }
+                                    ?>
+                                </span>
                             </div>
                         </div>
                     </div>

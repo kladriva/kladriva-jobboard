@@ -91,6 +91,9 @@ $routes->group('admin', ['namespace' => 'App\Controllers', 'filter' => 'auth'], 
     
     // Route pour mettre à jour les slugs
     $routes->get('admin/update-slugs', 'Admin::updateCompanySlugs');
+    
+    // Route pour mettre à jour les dates de publication
+    $routes->get('admin/update-publication-dates', 'Admin::updateJobPublicationDates');
 });
 
 // Routes des agents IA et MCP

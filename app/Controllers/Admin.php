@@ -40,6 +40,25 @@ class Admin extends BaseController
         return $stateParameters;
     }
 
+    private function _handle_job_publication($stateParameters)
+    {
+        // $stateParameters est un objet stdClass, et les données sont dans $stateParameters->data (qui est un tableau)
+        
+        // Si le statut passe à 'published' et que published_at n'est pas défini
+        if (isset($stateParameters->data['status']) && $stateParameters->data['status'] === 'published') {
+            if (empty($stateParameters->data['published_at'])) {
+                $stateParameters->data['published_at'] = date('Y-m-d H:i:s');
+            }
+        }
+        
+        // Si le statut n'est pas 'published', on vide published_at
+        if (isset($stateParameters->data['status']) && $stateParameters->data['status'] !== 'published') {
+            $stateParameters->data['published_at'] = null;
+        }
+        
+        return $stateParameters;
+    }
+
     public function users()
     {
         $crud = new GroceryCrud();
@@ -85,14 +104,16 @@ class Admin extends BaseController
               ->displayAs('salary_currency', 'Devise du salaire')
               ->displayAs('salary_period', 'Période du salaire');
         $crud->addFields(['title', 'slug', 'description', 'requirements', 'benefits', 'company_id', 'category_id', 'location', 'location_type', 'contract_type', 'experience_level', 'salary_min', 'salary_max', 'salary_currency', 'salary_period', 'skills_required', 'technologies', 'status']);
-        $crud->editFields(['title', 'slug', 'description', 'requirements', 'benefits', 'company_id', 'category_id', 'location', 'location_type', 'contract_type', 'experience_level', 'salary_min', 'salary_max', 'salary_currency', 'salary_period', 'skills_required', 'technologies', 'status']);
+        $crud->editFields(['title', 'slug', 'description', 'requirements', 'benefits', 'company_id', 'category_id', 'location', 'location_type', 'contract_type', 'experience_level', 'salary_min', 'salary_max', 'salary_currency', 'salary_period', 'skills_required', 'technologies', 'status', 'published_at']);
         $crud->callbackBeforeInsert(function($post_array) { 
             $post_array = $this->_handle_timestamps($post_array, true);
-            return $this->_handle_job_slug($post_array);
+            $post_array = $this->_handle_job_slug($post_array);
+            return $this->_handle_job_publication($post_array);
         });
         $crud->callbackBeforeUpdate(function($post_array) { 
             $post_array = $this->_handle_timestamps($post_array, false);
-            return $this->_handle_job_slug($post_array);
+            $post_array = $this->_handle_job_slug($post_array);
+            return $this->_handle_job_publication($post_array);
         });
         $output = $crud->render();
         return view('admin_view', (array)$output);
@@ -167,5 +188,31 @@ class Admin extends BaseController
             $updated++;
         }
         return "✅ $updated entreprises mises à jour avec des slugs";
+    }
+
+    public function updateJobPublicationDates()
+    {
+        $db = \Config\Database::connect();
+        
+        // Mettre à jour les emplois publiés sans date de publication
+        $jobs = $db->table('jobs')
+                   ->where('status', 'published')
+                   ->where('published_at IS NULL OR published_at = "0000-00-00 00:00:00"')
+                   ->get()
+                   ->getResultArray();
+        
+        $updated = 0;
+        foreach ($jobs as $job) {
+            // Utiliser la date de création comme date de publication par défaut
+            $published_at = $job['created_at'] ?? date('Y-m-d H:i:s');
+            
+            $db->table('jobs')
+               ->where('id', $job['id'])
+               ->update(['published_at' => $published_at]);
+            
+            $updated++;
+        }
+        
+        return "✅ $updated emplois mis à jour avec des dates de publication";
     }
 }
