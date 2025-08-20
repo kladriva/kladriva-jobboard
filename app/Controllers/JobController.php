@@ -20,12 +20,6 @@ class JobController extends BaseController
         
         // Charger le helper URL
         helper('url');
-        
-        // Vérifier l'authentification pour toutes les méthodes
-        if (!auth()->loggedIn()) {
-            // Rediriger vers la page de connexion si non connecté
-            return redirect()->to('/login')->with('error', 'Vous devez être connecté pour accéder aux emplois.');
-        }
     }
     
     public function index()
@@ -74,8 +68,8 @@ class JobController extends BaseController
         $jobs = $builder->orderBy('jobs.created_at', 'DESC')
                         ->findAll();
         
-        // Récupérer les informations de l'utilisateur connecté
-        $user = auth()->user();
+        // Récupérer les informations de l'utilisateur connecté (optionnel)
+        $user = auth()->loggedIn() ? auth()->user() : null;
         
         $data = [
             'page_title' => 'Emplois IT - Trouvez votre prochaine opportunité',
@@ -84,7 +78,7 @@ class JobController extends BaseController
             'categories' => $this->categoryModel->where('is_active', true)->findAll(),
             'pager' => null,
             'filters' => $filters,
-            'user' => $user // Passer l'utilisateur connecté à la vue
+            'user' => $user // Passer l'utilisateur connecté à la vue (peut être null)
         ];
         
         return view('jobs/index', $data);
@@ -108,7 +102,7 @@ class JobController extends BaseController
         }
         
         // Récupérer les informations de l'utilisateur connecté (optionnel)
-        $user = auth()->user();
+        $user = auth()->loggedIn() ? auth()->user() : null;
         
         $data = [
             'page_title' => $job['title'] . ' - ' . $job['company_name'],
