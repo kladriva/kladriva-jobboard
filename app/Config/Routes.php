@@ -84,10 +84,10 @@ $routes->group('admin', ['namespace' => 'App\Controllers', 'filter' => 'auth'], 
     $routes->get('/', 'Admin::index');
     
     // Routes d'administration avec GroceryCRUD
-    $routes->match(['get', 'post'], 'users(/.*)?', 'Admin::users');
-    $routes->match(['get', 'post'], 'jobs(/.*)?', 'Admin::jobs');
-    $routes->match(['get', 'post'], 'companies(/.*)?', 'Admin::companies');
-    $routes->match(['get', 'post'], 'job-categories(/.*)?', 'Admin::jobCategories');
+    $routes->match(['GET', 'POST'], 'users(/.*)?', 'Admin::users');
+    $routes->match(['GET', 'POST'], 'jobs(/.*)?', 'Admin::jobs');
+    $routes->match(['GET', 'POST'], 'companies(/.*)?', 'Admin::companies');
+    $routes->match(['GET', 'POST'], 'job-categories(/.*)?', 'Admin::jobCategories');
     
     // Route pour mettre à jour les slugs
     $routes->get('admin/update-slugs', 'Admin::updateCompanySlugs');

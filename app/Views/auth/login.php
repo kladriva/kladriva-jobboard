@@ -19,6 +19,7 @@
         <!-- Formulaire principal -->
         <div class="auth-form-container">
             <form action="<?= base_url('auth/attemptLogin') ?>" method="post" class="auth-form">
+                <?= csrf_field() ?>
                 <!-- Champ email -->
                 <div class="form-group">
                     <div class="input-wrapper">

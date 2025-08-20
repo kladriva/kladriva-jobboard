@@ -42,6 +42,7 @@
             <?php endif; ?>
             
             <form action="<?= base_url('auth/attemptRegister') ?>" method="post" class="auth-form">
+                <?= csrf_field() ?>
                 <!-- Champ nom d'utilisateur -->
                 <div class="form-group">
                     <div class="input-wrapper">
