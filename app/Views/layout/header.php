@@ -50,6 +50,11 @@
                                         <i class="fas fa-user me-2"></i>Mon Profil
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item" href="<?= base_url('job-application/my-applications') ?>">
+                                        <i class="fas fa-file-alt me-2"></i>Mes Candidatures
+                                    </a>
+                                </li>
 
                                 <?php if (has_permission('admin.access')): ?>
                                     <li>

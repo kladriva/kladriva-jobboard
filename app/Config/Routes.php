@@ -22,6 +22,8 @@ $routes->get('emplois/admin', 'Admin::index');
 // Routes en anglais pour les emplois
 $routes->get('jobs', 'JobController::index');
 $routes->get('job/(:segment)', 'JobController::show/$1');
+$routes->get('jobs/show/(:segment)', 'JobController::show/$1'); // Route alternative pour la compatibilité
+$routes->get('jobs/show/(:num)', 'JobController::show/$1'); // Route par ID numérique
 $routes->get('consultants', 'Home::consultants');
 $routes->get('mentoring', 'Home::mentoring');
 $routes->get('entreprises', 'Home::entreprises');
@@ -34,6 +36,8 @@ $routes->post('auth/attemptLogin', 'Auth::attemptLogin');
 $routes->post('auth/attemptRegister', 'Auth::attemptRegister');
 $routes->get('auth/logout', 'Auth::logout');
 $routes->get('auth/profile', 'Auth::profile');
+$routes->post('auth/update-profile', 'Auth::updateProfile'); // Route pour mettre à jour le profil
+$routes->get('auth/user-info', 'Auth::userInfo'); // Route de debug pour vérifier les données utilisateur
 
 // Routes du tableau de bord (protégées par authentification)
 $routes->group('dashboard', ['namespace' => 'App\Controllers', 'filter' => 'auth'], function($routes) {
@@ -45,7 +49,6 @@ $routes->group('dashboard', ['namespace' => 'App\Controllers', 'filter' => 'auth
 // Routes des pages de contenu
 $routes->get('recrutement', 'Content::recrutement');
 $routes->get('conseil', 'Content::conseil');
-$routes->get('about', 'Content::about');
 
 // Routes des pages légales
 $routes->get('confidentialite', 'Legal::privacy');
@@ -63,8 +66,6 @@ $routes->get('recruter', 'Business::recruit');
 $routes->get('conseil-entreprise', 'Business::consulting');
 $routes->get('transformation', 'Business::transformation');
 $routes->get('partenariats', 'Business::partnerships');
-
-       
 
 // Routes des erreurs
 $routes->get('errors/404', 'Errors::notFound');
@@ -88,6 +89,11 @@ $routes->group('admin', ['namespace' => 'App\Controllers', 'filter' => 'auth'], 
     $routes->match(['GET', 'POST'], 'jobs(/.*)?', 'Admin::jobs');
     $routes->match(['GET', 'POST'], 'companies(/.*)?', 'Admin::companies');
     $routes->match(['GET', 'POST'], 'job-categories(/.*)?', 'Admin::jobCategories');
+    $routes->match(['GET', 'POST'], 'job-applications(/.*)?', 'Admin::jobApplications');
+    
+    // Routes pour visualiser et télécharger les CV
+    $routes->get('view-cv/(:num)', 'Admin::viewCv/$1');
+    $routes->get('download-cv/(:num)', 'Admin::downloadCv/$1');
     
     // Route pour mettre à jour les slugs
     $routes->get('admin/update-slugs', 'Admin::updateCompanySlugs');
@@ -102,5 +108,19 @@ $routes->group('agents', ['namespace' => 'App\Controllers\Agents'], function($ro
     $routes->post('mcp/execute', 'MCP::execute');
     $routes->get('ai/chat', 'AI::chat');
     $routes->post('ai/process', 'AI::process');
+});
+
+// Routes de contact
+$routes->get('contact', 'Contact::index');
+$routes->post('contact/send', 'Contact::send');
+
+// Route de la page à propos
+$routes->get('about', 'About::index');
+
+// Routes pour les candidatures (protégées par authentification)
+$routes->group('job-application', ['namespace' => 'App\Controllers', 'filter' => 'auth'], function($routes) {
+    $routes->get('apply/(:num)', 'JobApplication::apply/$1');
+    $routes->post('submit', 'JobApplication::submit');
+    $routes->get('my-applications', 'JobApplication::myApplications');
 });
 

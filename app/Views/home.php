@@ -17,7 +17,7 @@
                     <i class="fas fa-search"></i>
                     Trouver un emploi
                 </a>
-                <a href="<?= site_url('/recruter') ?>" class="btn btn-outline btn-large">
+                <a href="<?= site_url('/contact') ?>" class="btn btn-outline btn-large">
                     <i class="fas fa-users"></i>
                     Recruter des talents
                 </a>
@@ -96,7 +96,7 @@
                 <p class="service-description">
                     Trouvez les meilleurs talents IT pour votre équipe grâce à notre plateforme de recrutement intelligente et notre réseau de consultants qualifiés.
                 </p>
-                <a href="<?= site_url('/recrutement') ?>" class="service-link">En savoir plus <i class="fas fa-arrow-right"></i></a>
+                <a href="<?= site_url('/about') ?>" class="service-link">En savoir plus <i class="fas fa-arrow-right"></i></a>
             </div>
             
             <div class="service-card">
@@ -107,7 +107,7 @@
                 <p class="service-description">
                     Bénéficiez de l'expertise de consultants expérimentés pour accélérer votre développement et optimiser vos processus.
                 </p>
-                <a href="<?= site_url('/conseil') ?>" class="service-link">En savoir plus <i class="fas fa-arrow-right"></i></a>
+                <a href="<?= site_url('/about') ?>" class="service-link">En savoir plus <i class="fas fa-arrow-right"></i></a>
             </div>
             
             <div class="service-card">
@@ -118,7 +118,7 @@
                 <p class="service-description">
                     Développez vos compétences avec notre programme de mentoring personnalisé et nos formations continues en technologies émergentes.
                 </p>
-                <a href="<?= site_url('/mentoring') ?>" class="service-link">En savoir plus <i class="fas fa-arrow-right"></i></a>
+                <a href="<?= site_url('/about') ?>" class="service-link">En savoir plus <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </div>
@@ -149,7 +149,7 @@
                         <li>Support et suivi continu</li>
                     </ul>
                 </div>
-                <a href="<?= site_url('/consultants') ?>" class="service-detail-link">Découvrir nos consultants <i class="fas fa-arrow-right"></i></a>
+                <a href="<?= site_url('/contact') ?>" class="service-detail-link">Découvrir nos consultants <i class="fas fa-arrow-right"></i></a>
             </div>
             
             <div class="service-detail-card">
@@ -168,7 +168,7 @@
                         <li>Certifications et accréditations</li>
                     </ul>
                 </div>
-                <a href="<?= site_url('/mentoring') ?>" class="service-detail-link">Découvrir le mentoring <i class="fas fa-arrow-right"></i></a>
+                <a href="<?= site_url('/contact') ?>" class="service-detail-link">Découvrir le mentoring <i class="fas fa-arrow-right"></i></a>
             </div>
             
             <div class="service-detail-card">
@@ -187,7 +187,7 @@
                         <li>Support technique et opérationnel</li>
                     </ul>
                 </div>
-                <a href="<?= site_url('/entreprises') ?>" class="service-detail-link">Découvrir nos solutions <i class="fas fa-arrow-right"></i></a>
+                <a href="<?= site_url('/contact') ?>" class="service-detail-link">Découvrir nos solutions <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </div>

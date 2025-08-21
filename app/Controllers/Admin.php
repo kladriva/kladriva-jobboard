@@ -64,7 +64,7 @@ class Admin extends BaseController
         $crud = new GroceryCrud();
         $crud->setTable('users');
         $crud->setSubject('Utilisateur', 'Utilisateurs');
-        $crud->columns(['username', 'email', 'created_at']);
+        $crud->columns(['username', 'first_name', 'last_name', 'phone', 'location', 'created_at']);
         $crud->requiredFields(['username', 'email']);
         $crud->callbackBeforeInsert(function($post_array) { return $this->_handle_timestamps($post_array, true); });
         $crud->callbackBeforeUpdate(function($post_array) { return $this->_handle_timestamps($post_array, false); });
@@ -167,6 +167,193 @@ class Admin extends BaseController
         });
         $output = $crud->render();
         return view('admin_view', (array) $output);
+    }
+
+    /**
+     * Gestion des candidatures
+     */
+    public function jobApplications()
+    {
+        $crud = new GroceryCrud();
+        $crud->setTable('job_applications');
+        $crud->setSubject('Candidature', 'Candidatures');
+        
+        // Colonnes affichées
+        $crud->columns([
+            'id',
+            'user_id',
+            'job_id',
+            'cv_filename',
+            'status',
+            'created_at',
+            'actions'
+        ]);
+        
+        // Champs requis
+        $crud->requiredFields(['user_id', 'job_id', 'cv_filename', 'status']);
+        
+        // Champs d'ajout et d'édition
+        $crud->addFields(['user_id', 'job_id', 'cv_filename', 'cv_path', 'cover_letter', 'status', 'notes']);
+        $crud->editFields(['status', 'notes']);
+        
+        // Relations avec les autres tables (simplifiées pour éviter les erreurs)
+        $crud->setRelation('user_id', 'users', 'username');
+        $crud->setRelation('job_id', 'jobs', 'title');
+        
+        // Personnalisation des labels
+        $crud->displayAs('user_id', 'Candidat')
+              ->displayAs('job_id', 'Emploi')
+              ->displayAs('cv_filename', 'CV')
+              ->displayAs('cv_path', 'Chemin du CV')
+              ->displayAs('cover_letter', 'Lettre de motivation')
+              ->displayAs('created_at', 'Date de candidature');
+        
+        // Callbacks pour les timestamps
+        $crud->callbackBeforeInsert(function($post_array) { 
+            return $this->_handle_timestamps($post_array, true); 
+        });
+        $crud->callbackBeforeUpdate(function($post_array) { 
+            return $this->_handle_timestamps($post_array, false); 
+        });
+        
+        // Callback pour afficher le lien de téléchargement du CV
+        $crud->callbackColumn('cv_filename', function($value, $row) {
+            if (!empty($row->cv_path)) {
+                return '<span class="text-success"><i class="fas fa-file-pdf"></i> ' . $value . '</span>';
+            }
+            return '<span class="text-muted">CV non disponible</span>';
+        });
+        
+        // Callback pour afficher le statut avec des couleurs
+        $crud->callbackColumn('status', function($value, $row) {
+            $statusColors = [
+                'pending' => 'warning',
+                'reviewed' => 'info',
+                'shortlisted' => 'success',
+                'rejected' => 'danger',
+                'accepted' => 'success'
+            ];
+            $statusLabels = [
+                'pending' => 'En attente',
+                'reviewed' => 'Examinée',
+                'shortlisted' => 'Sélectionnée',
+                'rejected' => 'Non retenue',
+                'accepted' => 'Acceptée'
+            ];
+            
+            $color = $statusColors[$value] ?? 'secondary';
+            $label = $statusLabels[$value] ?? $value;
+            
+            return '<span class="badge bg-' . $color . '">' . $label . '</span>';
+        });
+        
+        // Callback pour afficher la date de manière plus lisible
+        $crud->callbackColumn('created_at', function($value, $row) {
+            return date('d/m/Y H:i', strtotime($value));
+        });
+        
+        // Callback pour la colonne actions
+        $crud->callbackColumn('actions', function($value, $row) {
+            $viewUrl = base_url('admin/view-cv/' . $row->id);
+            $downloadUrl = base_url('admin/download-cv/' . $row->id);
+            
+            return '<div class="d-flex gap-2">' .
+                   '<a href="' . $viewUrl . '" target="_blank" class="btn btn-sm btn-info" title="Voir le CV">' .
+                   '<i class="fas fa-eye"></i> Voir</a>' .
+                   '<a href="' . $downloadUrl . '" class="btn btn-sm btn-success" title="Télécharger le CV">' .
+                   '<i class="fas fa-download"></i> Télécharger</a>' .
+                   '</div>';
+        });
+        
+        // Filtres
+        $crud->where('job_applications.id >', 0);
+        
+        // Tri par défaut (commenté car peut causer des erreurs avec certaines versions de GroceryCRUD)
+        // $crud->setOrderBy('created_at', 'DESC');
+        
+        // Actions personnalisées via callbacks dans les colonnes
+        // Les boutons "Voir" et "Télécharger" sont déjà dans la colonne cv_filename
+        
+        // Permissions
+        $crud->unsetAdd(); // Pas d'ajout manuel de candidatures
+        $crud->unsetDelete(); // Pas de suppression de candidatures
+        
+        $output = $crud->render();
+        return view('admin_view', (array)$output);
+    }
+
+    /**
+     * Visualiser un CV
+     */
+    public function viewCv($id)
+    {
+        $jobApplicationModel = new \App\Models\JobApplicationModel();
+        $application = $jobApplicationModel->find($id);
+        
+        if (!$application) {
+            return redirect()->to('admin/job-applications')
+                ->with('error', 'Candidature introuvable.');
+        }
+        
+        $cvPath = FCPATH . $application['cv_path'];
+        
+        if (!file_exists($cvPath)) {
+            return redirect()->to('admin/job-applications')
+                ->with('error', 'Fichier CV introuvable.');
+        }
+        
+        // Déterminer le type MIME
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $cvPath);
+        finfo_close($finfo);
+        
+        // Pour les PDF, on peut les afficher directement
+        if ($mimeType === 'application/pdf') {
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: inline; filename="' . $application['cv_filename'] . '"');
+            header('Content-Length: ' . filesize($cvPath));
+            readfile($cvPath);
+            exit;
+        }
+        
+        // Pour les autres formats, on force le téléchargement
+        return $this->downloadCv($id);
+    }
+    
+    /**
+     * Télécharger un CV
+     */
+    public function downloadCv($id)
+    {
+        $jobApplicationModel = new \App\Models\JobApplicationModel();
+        $application = $jobApplicationModel->find($id);
+        
+        if (!$application) {
+            return redirect()->to('admin/job-applications')
+                ->with('error', 'Candidature introuvable.');
+        }
+        
+        $cvPath = FCPATH . $application['cv_path'];
+        
+        if (!file_exists($cvPath)) {
+            return redirect()->to('admin/job-applications')
+                ->with('error', 'Fichier CV introuvable.');
+        }
+        
+        // Déterminer le type MIME
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $cvPath);
+        finfo_close($finfo);
+        
+        // Forcer le téléchargement
+        header('Content-Type: ' . $mimeType);
+        header('Content-Disposition: attachment; filename="' . $application['cv_filename'] . '"');
+        header('Content-Length: ' . filesize($cvPath));
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Pragma: no-cache');
+        
+        readfile($cvPath);
+        exit;
     }
 
     private function generateSlug($title){$slug=strtolower(trim($title));$slug=preg_replace('/[^a-z0-9\s-]/','',$slug);$slug=preg_replace('/[\s-]+/','-',$slug);$slug=trim($slug,'-');if(empty($slug)){$slug='emploi-'.time();}return $slug;}

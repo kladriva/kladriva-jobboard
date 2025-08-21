@@ -29,6 +29,9 @@
     <link rel="icon" type="image/png" href="<?= base_url('img/logo-header.png') ?>">
     <link rel="shortcut icon" type="image/png" href="<?= base_url('img/logo-header.png') ?>">
     
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="<?= csrf_hash() ?>">
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,6 +43,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="<?= base_url('css/styles.css') ?>">
     <link rel="stylesheet" href="<?= base_url('css/jobs.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('css/contact.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('css/about.css') ?>">
     
     <!-- Structured Data -->
     <script type="application/ld+json">

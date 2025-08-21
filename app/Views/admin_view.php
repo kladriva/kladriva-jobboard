@@ -127,6 +127,9 @@
                 <li><a href="<?= base_url('admin/job-categories') ?>" <?= (current_url() == base_url('admin/job-categories')) ? 'class="active"' : '' ?>>
                     <i class="fas fa-tags"></i> Catégories
                 </a></li>
+                <li><a href="<?= base_url('admin/job-applications') ?>" <?= (current_url() == base_url('admin/job-applications')) ? 'class="active"' : '' ?>>
+                    <i class="fas fa-file-alt"></i> Candidatures
+                </a></li>
                 <li><a href="<?= base_url('/') ?>" style="margin-left: auto;">
                     <i class="fas fa-home"></i> Retour au site
                 </a></li>

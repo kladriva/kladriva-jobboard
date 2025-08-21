@@ -147,9 +147,33 @@
                         <a href="<?= site_url('job/' . $job['slug']) ?>" class="btn btn-outline">
                             Voir l'offre
                         </a>
-                        <a href="<?= site_url('contact?job=' . $job['id']) ?>" class="btn btn-primary">
-                            Postuler
-                        </a>
+                        <?php if (auth()->loggedIn()): ?>
+                            <?php 
+                            // Vérifier si l'utilisateur a déjà postulé
+                            $hasApplied = false;
+                            if (isset($user) && $user) {
+                                $jobApplicationModel = new \App\Models\JobApplicationModel();
+                                $hasApplied = $jobApplicationModel->hasUserApplied($user->id, $job['id']);
+                            }
+                            ?>
+                            
+                            <?php if ($hasApplied): ?>
+                                <button class="btn btn-success" disabled>
+                                    <i class="fas fa-check-circle"></i>
+                                    Candidature soumise
+                                </button>
+                            <?php else: ?>
+                                <button class="btn btn-primary" onclick="openApplicationModal(<?= $job['id'] ?>, '<?= esc($job['title']) ?>', '<?= esc($job['company_name']) ?>', '<?= esc($job['location'] ?? '') ?>')">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Postuler
+                                </button>
+                            <?php endif; ?>
+                        <?php else: ?>
+                            <a href="<?= site_url('auth/login?redirect=' . urlencode(site_url('job/' . $job['slug']))) ?>" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt"></i>
+                                Se connecter pour postuler
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </article>
                 <?php endforeach; ?>
@@ -158,5 +182,134 @@
         </div>
     </div>
 </section>
+
+<!-- Modal de Candidature -->
+<div id="applicationModal" class="application-modal">
+    <div class="application-modal-content">
+        <div class="application-modal-header">
+            <h2>Postuler à l'emploi</h2>
+            <button class="modal-close" onclick="closeApplicationModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="application-modal-body">
+            <div class="job-summary-modal">
+                <h3 id="modalJobTitle"></h3>
+                <p class="company-name">chez <strong id="modalCompanyName"></strong></p>
+                <p class="job-location" id="modalJobLocation"></p>
+            </div>
+            
+            <form class="application-form-modal" action="<?= site_url('job-application/submit') ?>" method="POST" enctype="multipart/form-data">
+                <?= csrf_field() ?>
+                
+                <input type="hidden" name="job_id" id="modalJobId">
+                <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" id="modalCsrfToken">
+                
+                <!-- CV Upload -->
+                <div class="form-group">
+                    <label for="cv" class="form-label">
+                        <i class="fas fa-file-pdf"></i>
+                        CV * <span class="text-muted">(PDF, DOC, DOCX - Max 2 MB)</span>
+                    </label>
+                    <input type="file" id="cv" name="cv" class="form-control modern" accept=".pdf,.doc,.docx" required>
+                    <small class="form-text text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Formats acceptés : PDF, DOC, DOCX. Taille maximale : 2 MB.
+                    </small>
+                </div>
+
+                <!-- Lettre de motivation -->
+                <div class="form-group">
+                    <label for="cover_letter" class="form-label">
+                        <i class="fas fa-envelope"></i>
+                        Lettre de motivation <span class="text-muted">(Optionnel)</span>
+                    </label>
+                    <textarea id="cover_letter" name="cover_letter" class="form-control modern" rows="4" placeholder="Présentez-vous et expliquez pourquoi vous êtes intéressé par ce poste..."></textarea>
+                    <small class="form-text text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Maximum 2000 caractères. Expliquez votre motivation et votre intérêt pour ce poste.
+                    </small>
+                </div>
+
+                <!-- Informations personnelles (lecture seule) -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-user"></i>
+                        Vos informations
+                    </label>
+                    <div class="user-info-modal">
+                        <?php if (isset($user) && $user): ?>
+                            <p><strong>Nom :</strong> <?= esc($user->first_name ?? '') ?> <?= esc($user->last_name ?? '') ?></p>
+                            <p><strong>Email :</strong> <?= esc($user->email ?? '') ?></p>
+                            <p><strong>Membre depuis :</strong> <?= date('d/m/Y', strtotime($user->created_at)) ?></p>
+                        <?php else: ?>
+                            <p class="text-muted">Veuillez vous connecter pour voir vos informations</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <!-- Consentement -->
+                <div class="form-group">
+                    <div class="form-check modern-check">
+                        <input type="checkbox" id="consent" name="consent" class="form-check-input" required checked>
+                        <label for="consent" class="form-check-label">
+                            J'accepte que mes données personnelles et mon CV soient traités pour cette candidature. 
+                            <a href="<?= site_url('privacy') ?>" class="terms-link">Politique de confidentialité</a>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="form-actions-modal">
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-paper-plane me-2"></i>
+                        Soumettre ma candidature
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="closeApplicationModal()">
+                        <i class="fas fa-times me-2"></i>
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openApplicationModal(jobId, jobTitle, companyName, jobLocation) {
+    // Mettre à jour le contenu de la modal
+    document.getElementById('modalJobId').value = jobId;
+    document.getElementById('modalJobTitle').textContent = jobTitle;
+    document.getElementById('modalCompanyName').textContent = companyName;
+    document.getElementById('modalJobLocation').textContent = jobLocation || 'Lieu non spécifié';
+    
+    // Mettre à jour le token CSRF
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (csrfToken) {
+        document.getElementById('modalCsrfToken').value = csrfToken;
+    }
+    
+    // Afficher la modal
+    document.getElementById('applicationModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeApplicationModal() {
+    document.getElementById('applicationModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+    
+    // Réinitialiser le formulaire
+    document.querySelector('.application-form-modal').reset();
+}
+
+// Fermer la modal en cliquant à l'extérieur
+window.onclick = function(event) {
+    const modal = document.getElementById('applicationModal');
+    if (event.target === modal) {
+        closeApplicationModal();
+    }
+}
+</script>
 
 <?= $this->endSection() ?>

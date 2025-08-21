@@ -2,171 +2,210 @@
 
 <?= $this->section('content') ?>
 
-<!-- Header du profil -->
-<div class="profile-header">
+<div class="profile-page-container">
     <div class="container">
-        <div class="profile-header-content">
-            <div class="profile-avatar-section">
-                <div class="profile-avatar">
-                    <div class="avatar-placeholder">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <button class="avatar-edit-btn" title="Modifier la photo">
-                        <i class="fas fa-camera"></i>
+        <div class="profile-header">
+            <h1 class="profile-title">Mon Profil</h1>
+            <p class="profile-subtitle">Gérez vos informations personnelles</p>
+        </div>
+
+        <?php if (session()->getFlashdata('success')): ?>
+            <div class="alert alert-success alert-dismissible fade show mb-4">
+                <i class="fas fa-check-circle me-2"></i>
+                <?= session()->getFlashdata('success') ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php endif; ?>
+
+        <?php if (session()->getFlashdata('error')): ?>
+            <div class="alert alert-danger alert-dismissible fade show mb-4">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <?= session()->getFlashdata('error') ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php endif; ?>
+
+        <div class="profile-content">
+            <!-- Formulaire centré -->
+            <div class="profile-card">
+                <div class="profile-card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-user-circle me-2"></i>
+                        Informations Personnelles
+                    </h3>
+                    <button class="btn btn-sm btn-outline-light" onclick="toggleEdit('personal-info')">
+                        <i class="fas fa-edit"></i> Modifier
                     </button>
                 </div>
-                <div class="profile-info">
-                    <h1 class="profile-name"><?= esc($user->username ?? 'Utilisateur') ?></h1>
-                    <p class="profile-email"><?= esc($user->email ?? '') ?></p>
-                    <div class="profile-status">
-                        <span class="status-badge">
-                            <i class="fas fa-circle"></i>
-                            Membre actif
-                        </span>
+                <div class="profile-card-body">
+                    <form id="personal-info-form" action="<?= base_url('auth/update-profile') ?>" method="post" style="display: none;">
+                        <?= csrf_field() ?>
+                        <div class="profile-info-grid">
+                            <div class="info-item">
+                                <label class="info-label">Nom d'utilisateur :</label>
+                                <input type="text" name="username" value="<?= esc($user->username) ?>" class="form-control" required>
+                            </div>
+                            
+                            <div class="info-item">
+                                <label class="info-label">Prénom :</label>
+                                <input type="text" name="first_name" value="<?= esc($user->first_name ?? '') ?>" class="form-control">
+                            </div>
+                            
+                            <div class="info-item">
+                                <label class="info-label">Nom :</label>
+                                <input type="text" name="last_name" value="<?= esc($user->last_name ?? '') ?>" class="form-control">
+                            </div>
+                            
+                            <div class="info-item">
+                                <label class="info-label">Email :</label>
+                                <span class="info-value">
+                                    <?php 
+                                    $userEmail = 'Non défini';
+                                    if (isset($identities) && !empty($identities)) {
+                                        foreach ($identities as $identity) {
+                                            if ($identity->type === 'email') {
+                                                $userEmail = esc($identity->secret);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    echo $userEmail;
+                                    ?>
+                                </span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <label class="info-label">Téléphone :</label>
+                                <input type="tel" name="phone" value="<?= esc($user->phone ?? '') ?>" class="form-control" placeholder="+237 621210000">
+                            </div>
+                            
+                            <div class="info-item">
+                                <label class="info-label">Localisation :</label>
+                                <input type="text" name="location" value="<?= esc($user->location ?? '') ?>" class="form-control" placeholder="Ville, Pays">
+                            </div>
+                            
+                            <div class="info-item">
+                                <label class="info-label">Membre depuis :</label>
+                                <span class="info-value">
+                                    <?= date('d/m/Y', strtotime($user->created_at)) ?>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions mt-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Sauvegarder
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="cancelEdit('personal-info')">
+                                <i class="fas fa-times me-2"></i>Annuler
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div id="personal-info-display">
+                        <div class="profile-info-grid">
+                            <div class="info-item">
+                                <label class="info-label">Nom d'utilisateur :</label>
+                                <span class="info-value"><?= esc($user->username) ?></span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <label class="info-label">Prénom :</label>
+                                <span class="info-value"><?= esc($user->first_name ?? 'Non renseigné') ?></span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <label class="info-label">Nom :</label>
+                                <span class="info-value"><?= esc($user->last_name ?? 'Non renseigné') ?></span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <label class="info-label">Email :</label>
+                                <span class="info-value">
+                                    <?php 
+                                    $userEmail = 'Non défini';
+                                    if (isset($identities) && !empty($identities)) {
+                                        foreach ($identities as $identity) {
+                                            if ($identity->type === 'email') {
+                                                $userEmail = esc($identity->secret);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    echo $userEmail;
+                                    ?>
+                                </span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <label class="info-label">Téléphone :</label>
+                                <span class="info-value"><?= esc($user->phone ?? 'Non renseigné') ?></span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <label class="info-label">Localisation :</label>
+                                <span class="info-value"><?= esc($user->location ?? 'Non renseigné') ?></span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <label class="info-label">Membre depuis :</label>
+                                <span class="info-value">
+                                    <?= date('d/m/Y', strtotime($user->created_at)) ?>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Actions du Profil à côté des informations -->
+                        <div class="profile-actions mt-4">
+                            <a href="<?= base_url('/') ?>" class="btn btn-primary">
+                                <i class="fas fa-home me-2"></i>
+                                Retour à l'accueil
+                            </a>
+                            
+                            <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Tableau de bord
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="profile-actions">
-                <a href="<?= base_url('dashboard') ?>" class="btn btn-primary btn-elevated">
-                    <i class="fas fa-tachometer-alt"></i>
-                    Tableau de bord
-                </a>
-                <a href="<?= base_url('auth/logout') ?>" class="btn btn-outline btn-danger">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Déconnexion
-                </a>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Contenu principal -->
-<main class="profile-main">
-    <div class="container">
-        <!-- Section des informations du profil -->
-        <section class="profile-section">
-            <div class="section-header">
-                <h2 class="section-title">Informations du profil</h2>
-                <p class="section-subtitle">Complétez votre profil pour améliorer votre visibilité</p>
-            </div>
-            
-            <div class="profile-cards-grid">
-                <div class="profile-card-modern">
-                    <div class="card-icon">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">Informations personnelles</h3>
-                        <p class="card-description">Nom, prénom, localisation et informations de contact</p>
-                    </div>
-                    <div class="card-actions">
-                        <button class="btn btn-outline btn-sm">
-                            <i class="fas fa-edit"></i>
-                            Modifier
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="profile-card-modern">
-                    <div class="card-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">Expérience professionnelle</h3>
-                        <p class="card-description">Vos postes, entreprises et responsabilités</p>
-                    </div>
-                    <div class="card-actions">
-                        <button class="btn btn-outline btn-sm">
-                            <i class="fas fa-plus"></i>
-                            Ajouter
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="profile-card-modern">
-                    <div class="card-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">Formation</h3>
-                        <p class="card-description">Diplômes, certifications et formations</p>
-                    </div>
-                    <div class="card-actions">
-                        <button class="btn btn-outline btn-sm">
-                            <i class="fas fa-plus"></i>
-                            Ajouter
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="profile-card-modern">
-                    <div class="card-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">Compétences techniques</h3>
-                        <p class="card-description">Langages, frameworks et outils maîtrisés</p>
-                    </div>
-                    <div class="card-actions">
-                        <button class="btn btn-outline btn-sm">
-                            <i class="fas fa-cog"></i>
-                            Gérer
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
+<script>
+function toggleEdit(section) {
+    const form = document.getElementById(section + '-form');
+    const display = document.getElementById(section + '-display');
+    const editBtn = event.target;
+    
+    if (form.style.display === 'none') {
+        form.style.display = 'block';
+        display.style.display = 'none';
+        editBtn.innerHTML = '<i class="fas fa-eye"></i> Voir';
+        editBtn.classList.remove('btn-outline-light');
+        editBtn.classList.add('btn-outline-secondary');
+    } else {
+        form.style.display = 'none';
+        display.style.display = 'block';
+        editBtn.innerHTML = '<i class="fas fa-edit"></i> Modifier';
+        editBtn.classList.remove('btn-outline-secondary');
+        editBtn.classList.add('btn-outline-light');
+    }
+}
 
-        <!-- Section des statistiques -->
-        <section class="profile-section">
-            <div class="section-header">
-                <h2 class="section-title">Vos statistiques</h2>
-                <p class="section-subtitle">Suivez votre activité et votre progression</p>
-            </div>
-            
-            <div class="stats-grid-modern">
-                <div class="stat-card-modern">
-                    <div class="stat-icon">
-                        <i class="fas fa-paper-plane"></i>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-number">0</div>
-                        <div class="stat-label">Candidatures envoyées</div>
-                    </div>
-                </div>
-                
-                <div class="stat-card-modern">
-                    <div class="stat-icon">
-                        <i class="fas fa-building"></i>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-number">0</div>
-                        <div class="stat-label">Entreprises consultées</div>
-                    </div>
-                </div>
-                
-                <div class="stat-card-modern">
-                    <div class="stat-icon">
-                        <i class="fas fa-bookmark"></i>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-number">0</div>
-                        <div class="stat-label">Offres sauvegardées</div>
-                    </div>
-                </div>
-                
-                <div class="stat-card-modern">
-                    <div class="stat-icon">
-                        <i class="fas fa-calendar-check"></i>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-number">0</div>
-                        <div class="stat-label">Jours d'activité</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-</main>
+function cancelEdit(section) {
+    const form = document.getElementById(section + '-form');
+    const display = document.getElementById(section + '-display');
+    const editBtn = form.parentElement.querySelector('.btn-outline-light, .btn-outline-secondary');
+    
+    form.style.display = 'none';
+    display.style.display = 'block';
+    editBtn.innerHTML = '<i class="fas fa-edit"></i> Modifier';
+    editBtn.classList.remove('btn-outline-secondary');
+    editBtn.classList.add('btn-outline-light');
+}
+</script>
 
 <?= $this->endSection() ?>

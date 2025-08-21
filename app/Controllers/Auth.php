@@ -146,4 +146,107 @@ class Auth extends BaseController
             'user' => $user
         ]);
     }
+
+    /**
+     * Affiche les informations de l'utilisateur connecté (pour debug)
+     */
+    public function userInfo(): string
+    {
+        if (!$this->auth->loggedIn()) {
+            return redirect()->to('login');
+        }
+
+        $user = $this->auth->getUser();
+        $identities = $user->identities();
+        
+        echo "<h2>Informations de l'utilisateur connecté</h2>";
+        echo "<p><strong>ID:</strong> " . $user->id . "</p>";
+        echo "<p><strong>Username:</strong> " . $user->username . "</p>";
+        echo "<p><strong>Email:</strong> " . ($user->email ?? 'Non défini') . "</p>";
+        echo "<p><strong>Date de création:</strong> " . $user->created_at . "</p>";
+        
+        echo "<h3>Identités :</h3>";
+        if (!empty($identities)) {
+            foreach ($identities as $identity) {
+                echo "<p><strong>Type:</strong> " . $identity->type . "</p>";
+                echo "<p><strong>Secret:</strong> " . $identity->secret . "</p>";
+                echo "<p><strong>Date de création:</strong> " . $identity->identity->created_at . "</p>";
+                echo "<hr>";
+            }
+        } else {
+            echo "<p>Aucune identité trouvée</p>";
+        }
+        
+        echo "<p><a href='" . base_url('/') . "'>Retour à l'accueil</a></p>";
+        
+        return '';
+    }
+
+    /**
+     * Met à jour le profil utilisateur
+     */
+    public function updateProfile(): RedirectResponse
+    {
+        if (!$this->auth->loggedIn()) {
+            return redirect()->to('login');
+        }
+
+        // Validation des données
+        $rules = [
+            'username' => 'required|min_length[3]|max_length[50]',
+            'first_name' => 'permit_empty|max_length[100]',
+            'last_name' => 'permit_empty|max_length[100]',
+            'phone' => 'permit_empty|max_length[20]',
+            'location' => 'permit_empty|max_length[200]'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()
+                ->with('error', 'Veuillez corriger les erreurs ci-dessous')
+                ->withInput()
+                ->with('errors', $this->validator->getErrors());
+        }
+
+        try {
+            // Utiliser notre modèle User personnalisé
+            $userModel = new \App\Models\UserModel();
+            $user = $this->auth->getUser();
+            
+            // Debug : Afficher les données reçues
+            log_message('info', 'Données reçues pour mise à jour profil : ' . json_encode($this->request->getPost()));
+            
+            // Préparer les données à mettre à jour
+            $updateData = [
+                'username' => $this->request->getPost('username'),
+                'first_name' => $this->request->getPost('first_name'),
+                'last_name' => $this->request->getPost('last_name'),
+                'phone' => $this->request->getPost('phone'),
+                'location' => $this->request->getPost('location')
+            ];
+
+            // Debug : Afficher les données préparées
+            log_message('info', 'Données préparées pour mise à jour : ' . json_encode($updateData));
+            log_message('info', 'ID utilisateur : ' . $user->id);
+
+            // Mettre à jour l'utilisateur avec notre méthode personnalisée
+            $success = $userModel->updateProfile($user->id, $updateData);
+
+            if ($success) {
+                // Log de la mise à jour
+                log_message('info', 'Profil mis à jour pour l\'utilisateur : ' . $user->username . ' (ID: ' . $user->id . ')');
+                
+                return redirect()->to('auth/profile')
+                    ->with('success', 'Profil mis à jour avec succès !');
+            } else {
+                throw new \Exception('Échec de la mise à jour en base de données');
+            }
+
+        } catch (\Exception $e) {
+            log_message('error', 'Erreur lors de la mise à jour du profil : ' . $e->getMessage());
+            
+            return redirect()->back()
+                ->with('error', 'Erreur lors de la mise à jour du profil : ' . $e->getMessage())
+                ->withInput();
+        }
+    }
 }

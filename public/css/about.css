@@ -1,0 +1,634 @@
+/* ===== PAGE À PROPOS - STYLES KLADRIVA ===== */
+
+/* Hero Section - Design soft et professionnel */
+.about-hero-section {
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.about-hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.about-hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.about-hero-title .highlight {
+    color: var(--secondary-400);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.about-hero-subtitle {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 0 auto;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Story Section - Design épuré et moderne */
+.story-section {
+    padding: 100px 0;
+    background: var(--neutral-50);
+    position: relative;
+}
+
+.story-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neutral-200), transparent);
+}
+
+.story-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.story-text .section-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--neutral-800);
+    font-weight: 600;
+}
+
+.story-description {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    color: var(--neutral-600);
+    font-weight: 400;
+}
+
+.story-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.story-stat {
+    text-align: center;
+    padding: 2.5rem 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--neutral-200);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.story-stat:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.story-stat .stat-number {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--primary-500);
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.story-stat .stat-label {
+    font-size: 1rem;
+    color: var(--neutral-600);
+    font-weight: 500;
+}
+
+/* Solutions Section - Design moderne et professionnel */
+.solutions-section {
+    padding: 100px 0;
+    background: white;
+    position: relative;
+}
+
+.solutions-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neutral-200), transparent);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    color: var(--neutral-800);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.section-subtitle {
+    font-size: 1.2rem;
+    color: var(--neutral-600);
+    max-width: 600px;
+    margin: 0 auto;
+    font-weight: 400;
+}
+
+.solutions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 3rem;
+}
+
+.solution-card {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--neutral-200);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.solution-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-500), var(--secondary-500));
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.solution-card:hover::before {
+    transform: scaleX(1);
+}
+
+.solution-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+.solution-icon {
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.solution-card:hover .solution-icon {
+    transform: scale(1.1);
+}
+
+.solution-icon i {
+    font-size: 2.2rem;
+    color: white;
+}
+
+.solution-title {
+    font-size: 1.8rem;
+    color: var(--neutral-800);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.solution-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--neutral-600);
+    margin-bottom: 2rem;
+    font-weight: 400;
+}
+
+.solution-features,
+.solution-benefits {
+    margin-bottom: 1.5rem;
+}
+
+.solution-features h4,
+.solution-benefits h4 {
+    font-size: 1.1rem;
+    color: var(--neutral-800);
+    margin-bottom: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.solution-features h4::before,
+.solution-benefits h4::before {
+    content: "✨";
+    font-size: 1.2rem;
+}
+
+.solution-features ul,
+.solution-benefits ul {
+    list-style: none;
+    padding: 0;
+}
+
+.solution-features li,
+.solution-benefits li {
+    padding: 0.5rem 0;
+    color: var(--neutral-600);
+    position: relative;
+    padding-left: 1.8rem;
+    font-weight: 400;
+}
+
+.solution-features li::before,
+.solution-benefits li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--accent-500);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Approach Section - Design épuré et moderne */
+.approach-section {
+    padding: 100px 0;
+    background: var(--neutral-50);
+    position: relative;
+}
+
+.approach-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neutral-200), transparent);
+}
+
+.approach-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 3rem;
+    margin-top: 4rem;
+}
+
+.approach-step {
+    text-align: center;
+    padding: 2.5rem 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--neutral-200);
+    transition: transform 0.3s ease;
+}
+
+.approach-step:hover {
+    transform: translateY(-5px);
+}
+
+.step-number {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 auto 2rem;
+    box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+}
+
+.step-title {
+    font-size: 1.3rem;
+    color: var(--neutral-800);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.step-description {
+    color: var(--neutral-600);
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+/* Expertise Section - Design moderne et professionnel */
+.expertise-section {
+    padding: 100px 0;
+    background: white;
+    position: relative;
+}
+
+.expertise-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neutral-200), transparent);
+}
+
+.expertise-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+    margin-top: 4rem;
+}
+
+.expertise-category {
+    background: var(--neutral-50);
+    padding: 2.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--neutral-200);
+    transition: all 0.3s ease;
+}
+
+.expertise-category:hover {
+    background: white;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-3px);
+}
+
+.expertise-title {
+    font-size: 1.4rem;
+    color: var(--neutral-800);
+    margin-bottom: 2rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.expertise-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+}
+
+.tag {
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.2);
+}
+
+.tag:hover {
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+/* Testimonials Section - Design élégant et professionnel */
+.testimonials-section {
+    padding: 100px 0;
+    background: var(--neutral-50);
+    position: relative;
+}
+
+.testimonials-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neutral-200), transparent);
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 2.5rem;
+    margin-top: 4rem;
+}
+
+.testimonial-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--neutral-200);
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.testimonial-card::before {
+    content: '"';
+    position: absolute;
+    top: 1rem;
+    left: 2rem;
+    font-size: 4rem;
+    color: var(--primary-200);
+    font-family: serif;
+    line-height: 1;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+}
+
+.testimonial-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--neutral-600);
+    font-style: italic;
+    margin-bottom: 2rem;
+    font-weight: 400;
+    padding-left: 2rem;
+}
+
+.testimonial-author {
+    border-top: 1px solid var(--neutral-200);
+    padding-top: 1.5rem;
+}
+
+.author-name {
+    font-size: 1.1rem;
+    color: var(--neutral-800);
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.author-title {
+    color: var(--primary-500);
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+.author-company {
+    color: var(--neutral-500);
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+/* CTA Section - Design impactant et professionnel */
+.about-cta-section {
+    padding: 100px 0;
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain2" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain2)"/></svg>');
+    opacity: 0.2;
+}
+
+.cta-content {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.cta-title {
+    font-size: 2.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cta-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    opacity: 0.95;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+.cta-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Responsive Design - Respect de la charte graphique */
+@media (max-width: 768px) {
+    .about-hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .story-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+    
+    .solutions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .approach-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .expertise-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .cta-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .cta-title {
+        font-size: 2.2rem;
+    }
+    
+    .about-hero-section,
+    .story-section,
+    .solutions-section,
+    .approach-section,
+    .expertise-section,
+    .testimonials-section,
+    .about-cta-section {
+        padding: 80px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-hero-section,
+    .story-section,
+    .solutions-section,
+    .approach-section,
+    .expertise-section,
+    .testimonials-section,
+    .about-cta-section {
+        padding: 60px 0;
+    }
+    
+    .about-hero-title {
+        font-size: 2rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .solution-card,
+    .testimonial-card {
+        padding: 2rem;
+    }
+    
+    .story-stat {
+        padding: 2rem 1.5rem;
+    }
+}

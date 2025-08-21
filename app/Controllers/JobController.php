@@ -101,15 +101,23 @@ class JobController extends BaseController
             log_message('error', 'Erreur lors de l\'incrémentation des vues: ' . $e->getMessage());
         }
         
-        // Récupérer les informations de l'utilisateur connecté (optionnel)
+        // Récupérer les informations de l'utilisateur connecté et vérifier s'il a déjà postulé
         $user = auth()->loggedIn() ? auth()->user() : null;
+        $hasUserApplied = false;
+        
+        if ($user) {
+            // Vérifier si l'utilisateur a déjà postulé
+            $jobApplicationModel = new \App\Models\JobApplicationModel();
+            $hasUserApplied = $jobApplicationModel->hasUserApplied($user->id, $job['id']);
+        }
         
         $data = [
             'page_title' => $job['title'] . ' - ' . $job['company_name'],
             'page_description' => substr(strip_tags($job['description']), 0, 160),
             'job' => $job,
             'related_jobs' => $this->getRelatedJobs($job['id'], $job['category_id']),
-            'user' => $user // Passer l'utilisateur connecté à la vue (peut être null)
+            'user' => $user, // Passer l'utilisateur connecté à la vue (peut être null)
+            'hasUserApplied' => $hasUserApplied // Passer l'information sur la candidature
         ];
         
         return view('jobs/show', $data);

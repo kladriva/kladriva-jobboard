@@ -6,116 +6,114 @@ use CodeIgniter\Config\BaseConfig;
 
 class Email extends BaseConfig
 {
-    public string $fromEmail  = 'kladrivas@gmaul.com';
-    public string $fromName   = 'kladrivas';
-    public string $recipients = '';
-
     /**
-     * The "user agent"
+     * @var string
      */
-    public string $userAgent = 'CodeIgniter';
+    public string $fromEmail = 'noreply@kladriva.ca';
 
     /**
-     * The mail sending protocol: mail, sendmail, smtp
+     * @var string
      */
-    public string $protocol = 'mail';
+    public string $fromName = 'Kladriva';
 
     /**
-     * The server path to Sendmail.
+     * @var string
      */
-    public string $mailPath = '/usr/sbin/sendmail';
+    public string $protocol = 'smtp';
 
     /**
-     * SMTP Server Hostname
+     * @var string
      */
-    public string $SMTPHost = '';
+    public string $SMTPHost = 'mail.kladriva.ca'; // Votre serveur SMTP
+    
+    // Alternatives selon votre hébergeur :
+    // - 'smtp.kladriva.ca'
+    // - 'mail.kladriva.ca'
+    // - 'smtp.votre-hebergeur.com'
+    // - 'localhost' (si sur le même serveur)
 
     /**
-     * SMTP Username
+     * @var string
      */
-    public string $SMTPUser = '';
+    public string $SMTPUser = 'noreply@kladriva.ca'; // Votre email d'envoi
 
     /**
-     * SMTP Password
+     * @var string
      */
-    public string $SMTPPass = '';
+    public string $SMTPPass = 'Phil1v21!!!'; // Votre mot de passe
 
     /**
-     * SMTP Port
+     * @var int
      */
-    public int $SMTPPort = 25;
+    public int $SMTPPort = 587; // Port standard pour TLS
+    
+    // Alternatives selon votre hébergeur :
+    // - 587 (TLS recommandé)
+    // - 465 (SSL)
+    // - 25 (non sécurisé, déconseillé)
 
     /**
-     * SMTP Timeout (in seconds)
+     * @var string
      */
-    public int $SMTPTimeout = 5;
+    public string $SMTPCrypto = 'tls'; // Chiffrement TLS recommandé
+    
+    // Alternatives :
+    // - 'tls' (recommandé)
+    // - 'ssl' (si port 465)
+    // - '' (pas de chiffrement, déconseillé)
 
     /**
-     * Enable persistent SMTP connections
+     * @var bool
+     */
+    public bool $SMTPAuth = true;
+
+    /**
+     * @var bool
      */
     public bool $SMTPKeepAlive = false;
 
     /**
-     * SMTP Encryption.
-     *
-     * @var string '', 'tls' or 'ssl'. 'tls' will issue a STARTTLS command
-     *             to the server. 'ssl' means implicit SSL. Connection on port
-     *             465 should set this to ''.
+     * @var string
      */
-    public string $SMTPCrypto = 'tls';
+    public string $mailType = 'html';
 
     /**
-     * Enable word-wrap
-     */
-    public bool $wordWrap = true;
-
-    /**
-     * Character count to wrap at
-     */
-    public int $wrapChars = 76;
-
-    /**
-     * Type of mail, either 'text' or 'html'
-     */
-    public string $mailType = 'text';
-
-    /**
-     * Character set (utf-8, iso-8859-1, etc.)
+     * @var string
      */
     public string $charset = 'UTF-8';
 
     /**
-     * Whether to validate the email address
+     * @var bool
      */
     public bool $validate = false;
 
     /**
-     * Email Priority. 1 = highest. 5 = lowest. 3 = normal
+     * @var int
      */
     public int $priority = 3;
 
     /**
-     * Newline character. (Use “\r\n” to comply with RFC 822)
+     * @var bool
      */
-    public string $CRLF = "\r\n";
+    public bool $CRLF = false;
 
     /**
-     * Newline character. (Use “\r\n” to comply with RFC 822)
+     * @var string
      */
     public string $newline = "\r\n";
 
     /**
-     * Enable BCC Batch Mode.
+     * @var bool
      */
     public bool $BCCBatchMode = false;
 
     /**
-     * Number of emails in each BCC batch
+     * @var int
      */
     public int $BCCBatchSize = 200;
 
     /**
-     * Enable notify message from server
+     * @var bool
      */
     public bool $DSN = false;
 }
